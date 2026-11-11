@@ -44,17 +44,21 @@ for (let i = 0; i < projects.length; ) {
 
   {
     slides.length > 0 && (
-      <HeroSlideshow slides={slides} intervalSeconds={heroSettings.intervalSeconds} fadeMs={heroSettings.fadeMs}>
-        <p class="hero-tagline">{site.tagline}</p>
-      </HeroSlideshow>
+      <HeroSlideshow slides={slides} intervalSeconds={heroSettings.intervalSeconds} fadeMs={heroSettings.fadeMs} />
     )
   }
+
+  <section class="section motto" aria-label="Our motto">
+    <div class="container">
+      <p class="motto__text">“{site.tagline}”</p>
+    </div>
+  </section>
 
   <section class="section intro" aria-label="About the studio">
     <div class="container grid">
       <p class="intro__text reveal">
-        Yuga Architects is an architecture and interiors studio in Palakkad, Kerala, working on homes, workplaces
-        and renovations across India and the UAE. <a href={url('/studio/')}>About the studio</a>
+        Yuga Architects is an architecture and interiors studio working on homes, workplaces and renovations across
+        multiple cities in India and the UAE. <a href={url('/studio/')}>About the studio</a>
       </p>
     </div>
   </section>
@@ -131,10 +135,30 @@ for (let i = 0; i < projects.length; ) {
 </BaseLayout>
 
 <style>
-  .hero-tagline {
+  /* The tagline as the studio's motto: centred, large and lightly tracked, under a short hairline */
+  .motto {
+    padding-bottom: var(--section-gap);
+  }
+
+  .motto__text {
+    max-width: 22ch;
+    margin-inline: auto;
     font-family: var(--font-heading);
     font-weight: 300;
-    font-size: var(--size-h3);
+    font-size: clamp(1.75rem, 1.2rem + 2.4vw, 3.25rem); /* 28 → 52 px */
+    line-height: 1.2;
+    letter-spacing: 0.06em;
+    text-align: center;
+    text-wrap: balance;
+  }
+
+  .motto__text::before {
+    content: '';
+    display: block;
+    width: 2.5rem;
+    height: 1px;
+    margin: 0 auto var(--space-4);
+    background: var(--ink);
   }
 
   .intro__text {

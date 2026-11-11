@@ -9,7 +9,7 @@ Live at **https://yugaarchitects.in**.
 - Astro (static output, `output: 'static'`), TypeScript (strict)
 - Plain CSS with custom properties in `src/styles/`. No Tailwind or CSS frameworks.
 - Fonts self-hosted via Fontsource (`@fontsource-variable/jost` for headings and labels, `@fontsource-variable/instrument-sans` for body). Headings use light weights (300–400); the logo is the only heavy element. No serif. Never load Google Fonts from a CDN.
-- Logo files in `public/brand/` (see brief §3.2a). Never redraw the logo in CSS or text. Use the image files.
+- Logo files in `public/brand/` (see brief §3.2a). Never redraw the monogram or the full logo; use the image files. Exception (client decision, 11 Nov 2026): the site header shows the monogram image followed by the name set as text, "YUGA ARCHITECTS" in bold Jost caps at standard letter spacing, a hairline, and "Ar. Reshmi Ravindran" below, both centred in the space between the monogram and the nav (`src/components/Header.astro`).
 - Images via `astro:assets` (`<Picture>` with `formats={['avif','webp']}`)
 - `@astrojs/sitemap`
 - Contact form: Web3Forms (`https://api.web3forms.com/submit`), access key in `src/data/site.ts`
@@ -61,7 +61,7 @@ While `LAUNCHED = false` in `site-mode.mjs`, `BaseLayout` renders `src/component
 - Don't invent content. Use `[TBC: …]` placeholders where the client hasn't supplied facts.
 
 ## Firm facts (mirror of `src/data/site.ts`)
-- Name: Yuga Architects · Sub-line: Ar. Reshmi Ravindran · Tagline: *Unearthing your dreams*
+- Name: Yuga Architects · Sub-line: Ar. Reshmi Ravindran · Tagline: *Unearthing Your Dreams*
 - Email: yugaarchitects01@gmail.com
 - WhatsApp: +91 73059 92045 (`https://wa.me/917305992045`)
 - Call India: +91 62382 82925 · Call UAE: +971 56 593 9195

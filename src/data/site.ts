@@ -4,11 +4,13 @@ export const site = {
   name: 'Yuga Architects',
   subline: 'Ar. Reshmi Ravindran',
   founder: 'Ar. Reshmi Ravindran',
-  tagline: 'Unearthing your dreams',
+  tagline: 'Unearthing Your Dreams',
   url: 'https://yugaarchitects.in',
   description:
     'Yuga Architects is an architecture and interiors studio in Palakkad, Kerala, designing calm, carefully detailed homes and workplaces across India and the UAE.',
   practiceArea: 'Projects across India and the UAE',
+  /** Short regions line shown under the monogram in the header, as in the full logo. */
+  regions: 'India | UAE',
   locale: 'en_IN',
 } as const;
 
@@ -54,6 +56,14 @@ export const hours = {
   opens: '09:00',
   closes: '17:00',
 } as const;
+
+export const analytics = {
+  /**
+   * Google Analytics 4 Measurement ID, e.g. 'G-ABC123XYZ9' (GA → Admin → Data streams → your web stream).
+   * Leave empty to turn analytics off. It only loads on the published site, not in local dev.
+   */
+  gaMeasurementId: 'G-SGH9YMVDS1' as string,
+};
 
 export type NavItem = { label: string; href: string; draft?: boolean };
 

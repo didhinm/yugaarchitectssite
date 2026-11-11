@@ -29,21 +29,21 @@ npm run preview
 
 ## Holding page
 
-The live site currently shows an "Unearthing soon" holding page on every URL. Run `npm run dev:site` to see the full site locally. To go live, set `LAUNCHED = true` in [`site-mode.mjs`](site-mode.mjs), then commit and push.
+The site launched on 11 Nov 2026 (`LAUNCHED = true` in [`site-mode.mjs`](site-mode.mjs)). Setting it back to `false` and publishing would bring back the "Unearthing soon" holding page on every URL.
 
-## Before launch
+## Launch checklist
 
 - [x] First two projects (Talur’s, Summairi) with photos, write-ups and alt text
 - [ ] Larger originals of the project photos (≥2400 px long edge) where available
 - [x] Web3Forms access key in `src/data/site.ts`
-- [ ] Turn on hCaptcha for the form in the Web3Forms dashboard
+- [x] Spam protection: hCaptcha tick required in the browser (hCaptcha is off in the Web3Forms dashboard by choice) + hidden spam-trap field. Turn it on in the dashboard for full server-side protection if spam appears.
 - [x] Studio page: About copy
 - [x] Services descriptions and the final process step
 - [x] Founder page bio
 - [ ] Founder portrait: drop one image into `src/assets/founder/`
 - [x] Home hero slideshow (images in `src/assets/hero/`)
 - [ ] Exact map pin for the studio (`address.geo` in `src/data/site.ts`)
-- [ ] Set `LAUNCHED = true` in `site-mode.mjs`
+- [x] Set `LAUNCHED = true` in `site-mode.mjs`
 
 ## Deploy
 

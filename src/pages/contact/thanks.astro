@@ -14,6 +14,11 @@ import { contact } from '../../data/site';
     </p>
     <p><a href={url('/projects/')} class="button button--ghost">Back to projects</a></p>
   </header>
+
+  <!-- Counts a completed enquiry in Google Analytics (no-op when analytics is off) -->
+  <script is:inline>
+    if (typeof window.gtag === 'function') window.gtag('event', 'generate_lead', { form: 'contact' });
+  </script>
 </BaseLayout>
 
 <style>

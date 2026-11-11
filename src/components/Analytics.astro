@@ -1,0 +1,50 @@
+---
+// Google Analytics 4. Off unless a Measurement ID is set in src/data/site.ts (analytics.gaMeasurementId).
+// Loads only in production builds of the launched site, and only after the page has rendered,
+// so it doesn't slow the first view. Sends:
+//   - page views (automatic)
+//   - contact_click {method: whatsapp | phone | email | instagram | directions}
+//   - generate_lead when the contact form's thank-you page is reached (see contact/thanks.astro)
+import { analytics } from '../data/site';
+import { HOLDING_PAGE } from '../../site-mode.mjs';
+
+const id = analytics.gaMeasurementId.trim();
+const enabled = Boolean(id) && import.meta.env.PROD && !HOLDING_PAGE;
+---
+
+{
+  enabled && (
+    <script is:inline define:vars={{ id }}>
+      window.dataLayer = window.dataLayer || [];
+      window.gtag = function () {
+        window.dataLayer.push(arguments);
+      };
+      window.gtag('js', new Date());
+      window.gtag('config', id);
+
+      // Load Google's script once the page is idle
+      var load = function () {
+        var s = document.createElement('script');
+        s.async = true;
+        s.src = 'https://www.googletagmanager.com/gtag/js?id=' + encodeURIComponent(id);
+        document.head.appendChild(s);
+      };
+      if ('requestIdleCallback' in window) window.requestIdleCallback(load, { timeout: 3000 });
+      else window.setTimeout(load, 2000);
+
+      // Count clicks on the direct contact links
+      document.addEventListener('click', function (event) {
+        var link = event.target instanceof Element ? event.target.closest('a[href]') : null;
+        if (!link) return;
+        var href = link.getAttribute('href') || '';
+        var method = href.indexOf('https://wa.me') === 0 ? 'whatsapp'
+          : href.indexOf('tel:') === 0 ? 'phone'
+          : href.indexOf('mailto:') === 0 ? 'email'
+          : href.indexOf('instagram.com') !== -1 ? 'instagram'
+          : href.indexOf('google.com/maps') !== -1 ? 'directions'
+          : null;
+        if (method) window.gtag('event', 'contact_click', { method: method, link_url: href });
+      });
+    </script>
+  )
+}

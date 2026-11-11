@@ -2,19 +2,27 @@
 import { Image } from 'astro:assets';
 import { site, visibleNav, contact } from '../data/site';
 import monogram from '../assets/brand/monogram.png';
-import wordmark from '../assets/brand/wordmark.png';
 import { url, stripBase } from '../lib/url';
 
 const path = stripBase(Astro.url.pathname);
 const isCurrent = (href: string) => path === href || path.startsWith(href);
 const home = url('/');
+
+// Header name, set as text (client decision 11 Nov 2026): monogram at the far left, and the name and
+// subline centred on each other in the free space between the monogram and the nav.
 ---
 
 <header class="site-header" data-header>
   <div class="container site-header__inner">
-    <a href={home} class="brand plain" aria-label={`${site.name}, ${site.subline}: home`}>
-      <Image src={monogram} alt="" width={88} class="brand__mark" loading="eager" />
-      <Image src={wordmark} alt="" width={320} class="brand__wordmark" loading="eager" />
+    <a href={home} class="brand plain" aria-label={`${site.name}, ${site.subline}, ${site.regions}: home`}>
+      <span class="brand__markwrap" aria-hidden="true">
+        <Image src={monogram} alt="" width={88} class="brand__mark" loading="eager" />
+        <span class="brand__regions">{site.regions}</span>
+      </span>
+      <span class="brand__text" aria-hidden="true">
+        <span class="brand__name">{site.name}</span>
+        <span class="brand__sub">{site.subline}</span>
+      </span>
     </a>
 
     <nav class="nav" aria-label="Main">
@@ -95,10 +103,24 @@ const home = url('/');
     height: var(--header-height-compact);
   }
 
+  /* Brand: monogram at the far left, then the name stretching across the free space up to the nav (or MENU). */
   .brand {
+    flex: 1 1 auto;
+    min-width: 0;
     display: flex;
     align-items: center;
     gap: var(--space-2);
+    margin-right: var(--space-3);
+    color: var(--ink);
+  }
+
+  /* Monogram with "India | UAE" centred beneath it, as in the full logo */
+  .brand__markwrap {
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.3rem;
   }
 
   .brand__mark {
@@ -107,21 +129,74 @@ const home = url('/');
     transition: height var(--duration) var(--ease-out);
   }
 
+  .brand__regions {
+    font-family: var(--font-heading);
+    font-size: 0.5625rem; /* 9px on phones */
+    font-weight: 500;
+    line-height: 1;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+  }
+
+  @media (min-width: 64rem) {
+    .brand__regions {
+      font-size: 0.6875rem; /* 11px */
+    }
+  }
+
   .is-compact .brand__mark {
     height: calc(var(--mark-height) * 0.82);
   }
 
-  /* The wordmark file carries empty space under the name line; nudge it down so the caps align with the monogram. */
-  .brand__wordmark {
-    display: none;
-    height: calc(var(--mark-height) * 1.05);
-    width: auto;
-    margin-top: calc(var(--mark-height) * 0.22);
+  /* Name block fills the space between monogram and nav; both lines are centred within it and on each other */
+  .brand__text {
+    --name-size: 1rem; /* 16px on phones */
+    flex: 1 1 auto;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    font-family: var(--font-heading);
+    line-height: 1;
+    white-space: nowrap;
   }
 
-  .is-compact .brand__wordmark {
-    height: calc(var(--mark-height) * 0.86);
-    margin-top: calc(var(--mark-height) * 0.18);
+  /* Bold caps at the font's standard letter spacing; the hairline under it matches the name's width, as in the logo. */
+  .brand__name {
+    font-size: var(--name-size);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: normal;
+    padding-bottom: 0.32em;
+    border-bottom: 1px solid currentColor;
+    transition: font-size var(--duration) var(--ease-out);
+  }
+
+  .brand__sub {
+    margin-top: 0.45em;
+    font-size: calc(var(--name-size) * 0.66);
+    font-weight: 400;
+    letter-spacing: normal;
+    transition: font-size var(--duration) var(--ease-out);
+  }
+
+  .is-compact .brand__text {
+    --name-size: 0.9375rem;
+  }
+
+  @media (min-width: 64rem) {
+    .brand {
+      margin-right: var(--space-5);
+    }
+
+    .brand__text {
+      --name-size: 1.75rem; /* 28px */
+    }
+
+    .is-compact .brand__text {
+      --name-size: 1.375rem;
+    }
   }
 
   .nav {
@@ -155,10 +230,6 @@ const home = url('/');
   }
 
   @media (min-width: 64rem) {
-    .brand__wordmark {
-      display: block;
-    }
-
     .nav {
       display: block;
     }

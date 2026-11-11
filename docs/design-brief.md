@@ -11,7 +11,7 @@ Items marked **[TBC]** are waiting on the client.
 |---|---|
 | Firm name | **Yuga Architects** |
 | Wordmark lockup | "Yuga Architects" with "Ar. Reshmi Ravindran" beneath, in a smaller size |
-| Tagline | *Unearthing your dreams* |
+| Tagline | *Unearthing Your Dreams* (Y and D capitalised) |
 | Founder | Ar. Reshmi Ravindran, Founder & Principal Architect. Bio received 11 Nov 2026; portrait **[TBC]** |
 | Studio | Palakkad, Kerala, India |
 | Practice area | Projects across India and the UAE |
@@ -83,7 +83,7 @@ Files are in `public/brand/` (transparent PNGs cropped from the master; replace 
 | File | Use |
 |---|---|
 | `monogram.png` / `-white` | Header on mobile; favicon source; small marks |
-| `wordmark.png` / `-white` | Header on desktop, next to the monogram ("YUGA ARCHITECTS / Ar. Reshmi Ravindran") |
+| `wordmark.png` / `-white` | Not used in the header since 11 Nov 2026 (see Header below); kept for print and social use |
 | `logo-full.png` / `-white` | Footer and social preview: the full lockup including "India \| UAE" |
 | `icon-32/180/512.png` | Favicon, Apple touch icon, web manifest |
 
@@ -96,7 +96,7 @@ Files are in `public/brand/` (transparent PNGs cropped from the master; replace 
 - 12 columns on desktop, 4 on mobile; gutter 24 px; outer margin 20 px (mobile) → 64 px (desktop).
 - Max content width 1440 px; text blocks capped at ~680 px.
 - Vertical spacing scale: 8 / 16 / 24 / 40 / 64 / 96 / 160 px.
-- Header: wordmark lockup left, nav right. Shrinks to a minimal bar on scroll. On mobile, a full-screen overlay menu.
+- Header: monogram image at the far left, then the name set as text and **centred** in the free space between the monogram and the nav (MENU on mobile): **YUGA ARCHITECTS** in Jost 700 caps at standard letter spacing, a hairline under it, and *Ar. Reshmi Ravindran* centred below in Jost 400. Nav right. Shrinks on scroll. On mobile, a full-screen overlay menu. *(Client decision, 11 Nov 2026; previously the wordmark image.)*
 - Footer: wordmark, tagline, address, hours, contact links, Instagram, ©.
 
 ### 3.4 Photography rules
@@ -132,7 +132,7 @@ Files are in `public/brand/` (transparent PNGs cropped from the master; replace 
 ## 5. Page specifications
 
 ### 5.1 Home `/`
-1. **Hero:** a full-bleed slideshow of hero photographs that cross-fades to the next image every 3 s on a loop (interval and fade length are settings in `src/data/hero.ts`). The tagline *Unearthing your dreams* is set small beneath it, with a slide counter and Prev / Pause / Next controls on the same row. It pauses while its controls have keyboard focus and when the tab is hidden, and doesn't autoplay under `prefers-reduced-motion`. *(Changed 11 Nov 2026 at the client's request; was a single still image.)*
+1. **Hero:** a full-bleed slideshow of hero photographs that cross-fades to the next image every 3 s on a loop (interval and fade length are settings in `src/data/hero.ts`). A slide counter and Prev / Pause / Next controls sit on the row beneath it. Below that, the tagline *Unearthing Your Dreams* is set as the studio's motto: centred, in quote marks, large Jost 300 with light tracking, under a short hairline. The slideshow pauses while its controls have keyboard focus and when the tab is hidden, and doesn't autoplay under `prefers-reduced-motion`. *(Changed 11 Nov 2026 at the client's request; was a single still image.)*
 2. **Intro line:** one or two sentences on who Yuga is and where they work, linking to Studio.
 3. **Selected work:** all launch projects as large tiles (alternating full-width and 2-up). Each tile shows the image, project name, type label and location.
 4. **Services strip:** the six services as a simple text list, linking to Services.
@@ -181,7 +181,7 @@ Not offered (for internal reference; don't list publicly): turnkey / design-and-
 
 ### 5.7 Contact `/contact/`
 - Intro line plus **"Studio visits by appointment only."**
-- **Form** (Web3Forms): Name*, Email*, Phone (with country code), Project type (select: Residential / Villa · Commercial / Office · Interiors · Hospitality / Retail · Renovation · Other), Project location (city / country), Approx. timeline (select), Message*. Includes a honeypot and hCaptcha. Redirects to `/contact/thanks/`.
+- **Form** (Web3Forms): Name*, Email*, Phone (with country code), Project type (select: Residential / Villa · Commercial / Office · Interiors · Hospitality / Retail · Renovation · Other), Project location (city / country), Approx. timeline (select), Message*. Includes a honeypot and an hCaptcha tick, which the form requires before sending (checked in the browser; hCaptcha verification is off in the Web3Forms dashboard by client choice, 11 Nov 2026). Goes to `/contact/thanks/` on success.
 - **Direct contact:**
   - Email: yugaarchitects01@gmail.com
   - WhatsApp: +91 73059 92045 → `https://wa.me/917305992045`
@@ -242,7 +242,7 @@ The body holds the write-up sections (`## The brief`, etc.).
 - **SEO:** unique title and description per page; Open Graph and Twitter images (project cover); `@astrojs/sitemap`; canonical URLs; JSON-LD `ProfessionalService` with address, geo, phone and `areaServed` (India, UAE); one JSON-LD `CreativeWork` per project.
 - **Performance targets:** Lighthouse ≥ 95 on all four scores (mobile); LCP < 2.5 s on 4G; hero image preloaded; total JS < 30 KB.
 - **Accessibility:** WCAG 2.2 AA; semantic landmarks; visible focus styles; keyboard-operable menu and lightbox; form labels and error messages; `prefers-reduced-motion`.
-- **Analytics (optional):** privacy-friendly and cookie-free (e.g. Cloudflare Web Analytics or GoatCounter). No cookie banner needed if cookie-free.
+- **Analytics:** Google Analytics 4 (client decision, 11 Nov 2026; the brief had suggested a cookie-free tool). Measurement ID in `src/data/site.ts` (`analytics.gaMeasurementId`); it loads only on the published site, after the page has rendered (`src/components/Analytics.astro`). Events: page views, `contact_click` (whatsapp / phone / email / instagram / directions) and `generate_lead` (thank-you page). A one-line notice in the footer says the site uses Google Analytics cookies. GA adds ~100 KB of third-party JS, outside the 30 KB budget for the site's own code.
 - **Browser support:** last two versions of evergreen browsers, iOS Safari 16+.
 
 ---
@@ -265,4 +265,4 @@ The body holds the write-up sections (`## The brief`, etc.).
 1. ~~Typeface pairing~~ Resolved: Jost (light) + Instrument Sans, to match the logo.
 2. ~~Final step of the process~~ Resolved: design supervision through construction.
 3. ~~Which project is the home-page hero~~ Resolved: a hero slideshow from images in `src/assets/hero/`.
-4. Analytics: yes / no.
+4. ~~Analytics: yes / no~~ Resolved: Google Analytics 4.

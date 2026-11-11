@@ -102,7 +102,9 @@ import { absoluteUrl, url } from '../lib/url';
     </div>
   </div>
 
+  <!-- hCaptcha is off in the Web3Forms dashboard, so the tick is required here in the browser as basic spam protection -->
   <div class="h-captcha" data-captcha="true"></div>
+  <p class="field__error" id="f-captcha-error" data-captcha-error role="alert"></p>
 
   <p class="form__note muted">
     Fields marked * are required. Your details are used only to respond to your enquiry.
@@ -306,6 +308,17 @@ import { absoluteUrl, url } from '../lib/url';
         invalid[0].focus();
         return;
       }
+
+      // Basic spam protection: require the captcha tick before sending (checked here, not by Web3Forms)
+      const captcha = formEl.querySelector<HTMLElement>('.h-captcha');
+      const captchaError = formEl.querySelector<HTMLElement>('[data-captcha-error]');
+      const captchaResponse = formEl.querySelector<HTMLTextAreaElement>('[name="h-captcha-response"]');
+      if (captcha && !captchaResponse?.value) {
+        if (captchaError) captchaError.textContent = 'Please tick the “I am human” box before sending.';
+        captcha.scrollIntoView({ block: 'center', behavior: 'smooth' });
+        return;
+      }
+      if (captchaError) captchaError.textContent = '';
 
       // Plain POST and redirect are the no-JS fallback; send JSON in the background instead.
       const data = Object.fromEntries(new FormData(formEl));

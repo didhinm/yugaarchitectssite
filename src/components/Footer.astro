@@ -1,6 +1,6 @@
 ---
 import { Image } from 'astro:assets';
-import { site, contact, address, hours, visibleNav } from '../data/site';
+import { site, contact, address, hours, visibleNav, analytics } from '../data/site';
 import logoFull from '../assets/brand/logo-full.png';
 import { url } from '../lib/url';
 
@@ -46,6 +46,14 @@ const year = new Date().getFullYear();
     </div>
 
     <p class="site-footer__legal label">© {year} {site.name}</p>
+    {
+      analytics.gaMeasurementId && (
+        <p class="site-footer__privacy muted">
+          This site uses Google Analytics cookies to understand how visitors use it. No personal details are
+          collected through it.
+        </p>
+      )
+    }
   </div>
 </footer>
 
@@ -94,6 +102,12 @@ const year = new Date().getFullYear();
 
   .site-footer__legal {
     margin-top: var(--space-6);
+  }
+
+  .site-footer__privacy {
+    margin-top: var(--space-1);
+    font-size: 0.8125rem;
+    max-width: var(--measure);
   }
 
   @media (min-width: 48rem) {
