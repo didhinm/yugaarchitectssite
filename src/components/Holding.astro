@@ -1,0 +1,143 @@
+---
+// "Unearthing soon" holding page, shown on every URL while HOLDING_PAGE is true (site-mode.mjs).
+import { Image } from 'astro:assets';
+import { site } from '../data/site';
+import logoWhite from '../assets/brand/logo-full-white.png';
+---
+
+<div class="holding">
+  <svg class="holding__drawing" viewBox="0 0 1600 1000" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false">
+    <defs>
+      <pattern id="holding-grid" width="40" height="40" patternUnits="userSpaceOnUse">
+        <path class="g" d="M40 0H0V40"></path>
+      </pattern>
+    </defs>
+    <rect width="1600" height="1000" fill="url(#holding-grid)"></rect>
+    <!-- centre lines -->
+    <path class="l" stroke-width="1" stroke-dasharray="22 8 4 8" d="M120 650H1480M800 80V940"></path>
+    <!-- outer walls -->
+    <rect class="l" stroke-width="3" x="260" y="170" width="1080" height="660"></rect>
+    <!-- inner walls with door openings -->
+    <path class="l" stroke-width="2" d="M620 170V470M620 560V830M980 170V380M980 470V830M260 470H540M1060 470H1340"></path>
+    <!-- door swings -->
+    <path class="l" stroke-width="1" d="M620 470H710A90 90 0 0 1 620 560M980 380H890A90 90 0 0 0 980 470M540 470V380A90 90 0 0 1 620 470"></path>
+    <!-- stair -->
+    <path
+      class="l"
+      stroke-width="1"
+      d="M1040 230V330M1060 230V330M1080 230V330M1100 230V330M1120 230V330M1140 230V330M1160 230V330M1180 230V330M1200 230V330M1220 230V330M1240 230V330M1260 230V330M1280 230V330M1040 280H1300M1288 272L1300 280L1288 288"
+    ></path>
+    <!-- courtyard (void) -->
+    <rect class="l" stroke-width="1" x="300" y="560" width="260" height="230"></rect>
+    <path class="l" stroke-width="1" d="M300 560L560 790M560 560L300 790"></path>
+    <!-- columns -->
+    <path class="l" stroke-width="6" d="M260 170h1M620 170h1M980 170h1M1340 170h1M260 830h1M620 830h1M980 830h1M1340 830h1"></path>
+    <!-- dimension lines -->
+    <path class="l" stroke-width="1" d="M260 115H1340M260 105V125M620 105V125M980 105V125M1340 105V125M1395 170V830M1385 170H1405M1385 470H1405M1385 830H1405"></path>
+    <!-- trees -->
+    <circle class="l" stroke-width="1" cx="150" cy="860" r="46"></circle>
+    <circle class="l" stroke-width="1" cx="150" cy="860" r="3"></circle>
+    <circle class="l" stroke-width="1" cx="1470" cy="250" r="58"></circle>
+    <circle class="l" stroke-width="1" cx="1470" cy="250" r="3"></circle>
+    <circle class="l" stroke-width="1" cx="1500" cy="860" r="36"></circle>
+  </svg>
+  <div class="holding__veil" aria-hidden="true"></div>
+
+  <main class="holding__content">
+    <h1 class="visually-hidden">{site.name}: website coming soon</h1>
+    <Image
+      src={logoWhite}
+      alt={`${site.name}, ${site.subline}. India | UAE`}
+      width={960}
+      class="holding__logo"
+      loading="eager"
+      fetchpriority="high"
+    />
+    <p class="holding__soon">Unearthing soon</p>
+  </main>
+</div>
+
+<style>
+  :global(body.is-holding) {
+    background: var(--ink);
+    color: var(--paper);
+  }
+
+  .holding {
+    position: relative;
+    min-height: 100vh;
+    min-height: 100svh;
+    display: grid;
+    place-items: center;
+    padding: var(--margin);
+    overflow: hidden;
+    background: var(--ink);
+    color: var(--paper);
+  }
+
+  .holding__drawing {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+  }
+
+  .holding__drawing .g {
+    fill: none;
+    stroke: var(--paper);
+    stroke-opacity: 0.05;
+    stroke-width: 1;
+  }
+
+  .holding__drawing .l {
+    fill: none;
+    stroke: var(--paper);
+    stroke-opacity: 0.16;
+    vector-effect: non-scaling-stroke;
+  }
+
+  /* Darkens the drawing behind the logo so it stays legible */
+  .holding__veil {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: radial-gradient(
+      ellipse 42% 38% at 50% 50%,
+      rgb(20 20 20 / 0.92) 0%,
+      rgb(20 20 20 / 0.6) 55%,
+      rgb(20 20 20 / 0) 100%
+    );
+  }
+
+  .holding__content {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: clamp(2.5rem, 6vw, 4rem);
+    text-align: center;
+  }
+
+  .holding__logo {
+    width: min(78vw, 30rem);
+    height: auto;
+  }
+
+  .holding__soon {
+    font-family: var(--font-heading);
+    font-weight: 300;
+    font-size: clamp(1.25rem, 1rem + 1.2vw, 1.75rem);
+    letter-spacing: 0.02em;
+  }
+
+  .holding__soon::before {
+    content: '';
+    display: block;
+    width: 2.5rem;
+    height: 1px;
+    margin: 0 auto clamp(1.5rem, 4vw, 2.5rem);
+    background: currentColor;
+    opacity: 0.35;
+  }
+</style>

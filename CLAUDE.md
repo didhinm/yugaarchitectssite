@@ -41,6 +41,9 @@ public/            CNAME, favicon, robots.txt, og-default.jpg
 docs/              design-brief.md
 ```
 
+## Holding page (pre-launch)
+`site-mode.mjs` → `HOLDING_PAGE = true` makes `BaseLayout` render `src/components/Holding.astro` ("Unearthing soon", black background with a line-drawn plan) on every URL, including 404. All pages are noindex and no sitemap is built. Develop the full site with `HOLDING_PAGE = false` locally, but don't commit that until the client approves launch.
+
 ## Rules
 - **All firm facts come from `src/data/site.ts`.** Never hard-code a phone number, email, address or tagline in a component.
 - Design tokens only: use `var(--ink)` etc. Don't add new colours, fonts or font weights without updating the brief.

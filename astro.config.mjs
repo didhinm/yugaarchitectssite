@@ -1,6 +1,7 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
+import { HOLDING_PAGE } from './site-mode.mjs';
 
 // Where the site is served. Defaults to the custom domain at the root.
 // The deploy workflow overrides these while the site lives at didhinm.github.io/yugaarchitectssite/.
@@ -22,9 +23,12 @@ export default defineConfig({
   image: {
     responsiveStyles: false,
   },
-  integrations: [
-    sitemap({
-      filter: (page) => !EXCLUDED.includes(new URL(page).pathname),
-    }),
-  ],
+  // No sitemap while the holding page is up (every page is noindex).
+  integrations: HOLDING_PAGE
+    ? []
+    : [
+        sitemap({
+          filter: (page) => !EXCLUDED.includes(new URL(page).pathname),
+        }),
+      ],
 });

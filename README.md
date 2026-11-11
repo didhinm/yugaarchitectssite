@@ -23,6 +23,10 @@ npm run preview
 - Projects: one folder per project in `src/content/projects/<slug>/` with `index.md` and `images/`. Schema in `src/content.config.ts` (brief §6).
 - The five projects in the repo are **placeholders**: plain stone-coloured images and `[TBC]` text. Replace the images and frontmatter with the real projects before launch.
 
+## Holding page
+
+The live site currently shows an "Unearthing soon" holding page on every URL. The switch is `HOLDING_PAGE` in [`site-mode.mjs`](site-mode.mjs): set it to `false` to work on the full site locally, and commit `false` only when it's ready to go live.
+
 ## Before launch
 
 - [ ] Real project photos (≥2400 px long edge), names, write-ups and alt text
@@ -32,6 +36,7 @@ npm run preview
 - [ ] Founder page content, then un-draft it (see the comment at the top of `src/pages/founder.astro`)
 - [ ] Home hero project (currently the project with `order: 1`)
 - [ ] Exact map pin for the studio (`address.geo` in `src/data/site.ts`)
+- [ ] Set `HOLDING_PAGE = false` in `site-mode.mjs`
 
 ## Deploy
 
