@@ -71,7 +71,7 @@ While `LAUNCHED = false` in `site-mode.mjs`, `BaseLayout` renders `src/component
 
 ## Deployment
 1. `astro.config.mjs`: `site: 'https://yugaarchitects.in'`, no `base`.
-2. `.github/workflows/deploy.yml` uses `withastro/action` + `actions/deploy-pages` on push to **`first-live-build`** (the only branch the `github-pages` environment allows). `main` is the working branch and never deploys. To publish: merge `main` into `first-live-build` and push. Never push to `first-live-build` unless the user asks to publish. Content how-tos are in `docs/content-guide.md`; new projects start from `templates/project/`.
+2. `.github/workflows/deploy.yml` uses `withastro/action` + `actions/deploy-pages` on push to release branches named **`*-live-build`** (the `github-pages` environment allows only those). The current live release is **`second-live-build`**; `first-live-build` is kept for rollback. `main` is the working branch and never deploys. To publish: merge `main` into the current release branch and push, or cut the next release (`third-live-build`) from `main` when asked. Never push to a `*-live-build` branch unless the user asks to publish. Content how-tos are in `docs/content-guide.md`; new projects start from `templates/project/`.
 3. Repo → Settings → Pages: Source = GitHub Actions; custom domain `yugaarchitects.in`; Enforce HTTPS.
 4. Hostinger DNS: A records for `@` → 185.199.108.153, 185.199.109.153, 185.199.110.153, 185.199.111.153; AAAA → 2606:50c0:8000::153, 2606:50c0:8001::153, 2606:50c0:8002::153, 2606:50c0:8003::153; CNAME `www` → `<github-username>.github.io`. Remove Hostinger's default parking A/CNAME records first.
 

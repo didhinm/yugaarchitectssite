@@ -9,7 +9,10 @@ How to add and update content on yugaarchitects.in without touching the design c
 | Branch | Used for | Goes live? |
 |---|---|---|
 | `main` | Day-to-day work. Commit freely. | **No** |
-| `first-live-build` | The live site. | **Yes.** Every push deploys to https://yugaarchitects.in in about a minute |
+| `second-live-build` | **The current live release** (published 11 Nov 2026). | **Yes.** Every push deploys to https://yugaarchitects.in in about a minute |
+| `first-live-build` | The previous release (site launch). Kept for rollback. | Only if pushed to |
+
+Any branch whose name ends in `-live-build` deploys when pushed. The newest one is the live release.
 
 Nothing on `main` reaches the live site until you publish it.
 
@@ -19,29 +22,41 @@ Nothing on `main` reaches the live site until you publish it.
 npm run dev:site
 ```
 
-Then open http://localhost:4321. `npm run dev` shows the holding page while the site isn't launched.
+Then open http://localhost:4321.
 
 **Check before publishing:**
 
 ```bash
 npm run check
-npm run build:site
+npm run build
 ```
 
 Both must finish with no errors.
 
-**Publish (copy main to the live branch):**
+**Publish small updates (into the current live branch):**
 
 ```bash
-git checkout first-live-build
+git checkout second-live-build
 git merge main
 git push
 git checkout main
 ```
 
-The deploy runs automatically: GitHub repo → **Actions** tab → "Deploy to GitHub Pages".
+**Publish a new release (a new branch):** for a bigger round of changes, cut the next release branch from `main`. This keeps the previous release untouched for rollback:
 
-> While `LAUNCHED = false` in `site-mode.mjs`, the live site shows "Unearthing soon" on every page even after publishing. To launch, set `LAUNCHED = true` on `main`, commit, and publish as above.
+```bash
+git checkout -b third-live-build main
+git push -u origin third-live-build
+git checkout main
+```
+
+Then use that branch for small updates until the next release.
+
+**Roll back to a previous release:** GitHub repo → **Actions** → "Deploy to GitHub Pages" → **Run workflow** → pick the older branch (e.g. `first-live-build`) → **Run workflow**. The site switches back in about a minute. Publishing to the newer branch again switches it forward.
+
+The deploy runs automatically on push: GitHub repo → **Actions** tab → "Deploy to GitHub Pages".
+
+> `LAUNCHED` in `site-mode.mjs` must stay `true`. Setting it to `false` and publishing brings back the "Unearthing soon" holding page on every URL.
 
 ---
 

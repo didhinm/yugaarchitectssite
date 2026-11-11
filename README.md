@@ -47,14 +47,16 @@ The site launched on 11 Nov 2026 (`LAUNCHED = true` in [`site-mode.mjs`](site-mo
 
 ## Deploy
 
-The live site deploys **only from the `first-live-build` branch** (`.github/workflows/deploy.yml`; the GitHub Pages environment also allows only that branch). Work on `main`, then publish:
+The live site deploys **only from release branches named `*-live-build`** (`.github/workflows/deploy.yml`; the GitHub Pages environment allows only those). The current live release is **`second-live-build`**; `first-live-build` is the launch release, kept for rollback. Work on `main`, then publish:
 
 ```bash
-git checkout first-live-build
+git checkout second-live-build
 git merge main
 git push
 git checkout main
 ```
+
+New releases, rollback and the full workflow are in [`docs/content-guide.md`](docs/content-guide.md).
 
 One-time setup:
 
