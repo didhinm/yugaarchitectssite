@@ -137,12 +137,6 @@ export const services = [
     description:
       'Focused advice when you need a clear direction: a review of your site, a plan or an idea before you commit. It is also a simple way to begin a conversation with the studio.',
   },
-  {
-    slug: 'visualisation',
-    title: '3D visualisation',
-    description:
-      'Realistic 3D views of the design, so you can see the spaces, materials and light before anything is built. They make decisions easier and help everyone involved share the same picture.',
-  },
 ] as const;
 
 export const process = [

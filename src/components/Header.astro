@@ -148,9 +148,11 @@ const home = url('/');
     height: calc(var(--mark-height) * 0.82);
   }
 
-  /* Name block fills the space between monogram and nav; both lines are centred within it and on each other */
+  /* Name block fills the space between monogram and nav; both lines are centred within it and on each other.
+     --name-shift nudges the block sideways from centre (positive = right, towards the nav); 0.25em ≈ one space, so 1.375em ≈ five and a half spaces. */
   .brand__text {
     --name-size: 1rem; /* 16px on phones */
+    --name-shift: 1.375em;
     flex: 1 1 auto;
     min-width: 0;
     display: flex;
@@ -158,8 +160,10 @@ const home = url('/');
     align-items: center;
     text-align: center;
     font-family: var(--font-heading);
+    font-size: var(--name-size);
     line-height: 1;
     white-space: nowrap;
+    transform: translateX(var(--name-shift));
   }
 
   /* Bold caps at the font's standard letter spacing; the hairline under it matches the name's width, as in the logo. */

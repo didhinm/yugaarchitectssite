@@ -135,7 +135,7 @@ Files are in `public/brand/` (transparent PNGs cropped from the master; replace 
 1. **Hero:** a full-bleed slideshow of hero photographs that cross-fades to the next image every 3 s on a loop (interval and fade length are settings in `src/data/hero.ts`). A slide counter and Prev / Pause / Next controls sit on the row beneath it. Below that, the tagline *Unearthing Your Dreams* is set as the studio's motto: centred, in quote marks, large Jost 300 with light tracking, under a short hairline. The slideshow pauses while its controls have keyboard focus and when the tab is hidden, and doesn't autoplay under `prefers-reduced-motion`. *(Changed 11 Nov 2026 at the client's request; was a single still image.)*
 2. **Intro line:** one or two sentences on who Yuga is and where they work, linking to Studio.
 3. **Selected work:** all launch projects as large tiles (alternating full-width and 2-up). Each tile shows the image, project name, type label and location.
-4. **Services strip:** the six services as a simple text list, linking to Services.
+4. **Services strip:** the five services as a simple text list, linking to Services.
 5. **Founder teaser:** name, role and one line from the bio, linking to Founder. Shows the portrait once it is added to `src/assets/founder/`.
 6. **Enquiry CTA:** "Planning a home, workplace or renovation?" with buttons for Start a conversation (/contact) and WhatsApp.
 
@@ -165,13 +165,14 @@ Files are in `public/brand/` (transparent PNGs cropped from the master; replace 
 - Published in the nav and sitemap. Without a portrait the page shows the bio with a credentials panel; adding an image to `src/assets/founder/` switches it to the portrait layout.
 
 ### 5.6 Services `/services/`
-Six services, each with a two- or three-sentence description (drafted 11 Nov 2026; text lives in `src/data/site.ts`):
+Five services, each with a two- or three-sentence description (drafted 11 Nov 2026; text lives in `src/data/site.ts`):
 1. Architectural design
 2. Interior design
 3. Renovation & adaptive reuse
 4. Landscape design
 5. Design consultation
-6. 3D visualisation
+
+*(3D visualisation removed at the client's request, 11 Nov 2026.)*
 
 **Process** (confirmed 11 Nov 2026):
 Consultation → Concept → Design development → Drawings → Through construction
