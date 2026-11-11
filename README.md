@@ -30,8 +30,9 @@ The live site currently shows an "Unearthing soon" holding page on every URL. Th
 ## Before launch
 
 - [ ] Real project photos (≥2400 px long edge), names, write-ups and alt text
-- [ ] Web3Forms access key in `src/data/site.ts`
-- [ ] Studio page: opening statement and approach principles
+- [x] Web3Forms access key in `src/data/site.ts`
+- [ ] Turn on hCaptcha for the form in the Web3Forms dashboard
+- [x] Studio page: About copy
 - [ ] Services descriptions and the final process step
 - [ ] Founder page content, then un-draft it (see the comment at the top of `src/pages/founder.astro`)
 - [ ] Home hero project (currently the project with `order: 1`)

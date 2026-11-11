@@ -45,7 +45,7 @@ Most visitors arrive on **mobile, often from Instagram**. Design mobile-first. P
 2. **Restraint.** One typeface pairing, a neutral palette, no decorative graphics, no stock imagery, no icons beyond the functional.
 3. **Rhythm.** Generous vertical spacing; alternate full-bleed images with set-in text and 2-up image pairs.
 4. **Precision.** A strict grid, aligned baselines, small uppercase labels with open letter-spacing. The site's details should feel as considered as her buildings.
-5. **Calm motion.** Only subtle fades or reveals on scroll (≤300 ms, ease-out). No parallax, no carousels that autoplay. Respect `prefers-reduced-motion`.
+5. **Calm motion.** Only subtle fades or reveals on scroll (≤300 ms, ease-out). No parallax. The one exception is the home-page hero, which cross-fades through a set of images on a loop (see §5.1). No other autoplaying carousels. Respect `prefers-reduced-motion`.
 
 ### 3.1 Palette
 
@@ -132,7 +132,7 @@ Files are in `public/brand/` (transparent PNGs cropped from the master; replace 
 ## 5. Page specifications
 
 ### 5.1 Home `/`
-1. **Hero:** one full-bleed photograph from the strongest project, with the tagline *Unearthing your dreams* set small beneath or beside it. No slider.
+1. **Hero:** a full-bleed slideshow of hero photographs that cross-fades to the next image every 3 s on a loop (interval and fade length are settings in `src/data/hero.ts`). The tagline *Unearthing your dreams* is set small beneath it, with a slide counter and Prev / Pause / Next controls on the same row. It pauses while its controls have keyboard focus and when the tab is hidden, and doesn't autoplay under `prefers-reduced-motion`. *(Changed 11 Nov 2026 at the client's request; was a single still image.)*
 2. **Intro line:** one or two sentences on who Yuga is and where they work, linking to Studio.
 3. **Selected work:** all launch projects as large tiles (alternating full-width and 2-up). Each tile shows the image, project name, type label and location.
 4. **Services strip:** the six services as a simple text list, linking to Services.
@@ -263,5 +263,5 @@ The body holds the write-up sections (`## The brief`, etc.).
 
 1. ~~Typeface pairing~~ Resolved: Jost (light) + Instrument Sans, to match the logo.
 2. Final step of the process (site support vs. ends at drawings).
-3. Which project is the home-page hero.
+3. ~~Which project is the home-page hero~~ Resolved: a hero slideshow from images in `src/assets/hero/`.
 4. Analytics: yes / no.

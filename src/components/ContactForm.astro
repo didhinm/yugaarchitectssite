@@ -1,9 +1,20 @@
 ---
-import { form, site } from '../data/site';
-import { absoluteUrl } from '../lib/url';
+import { form, site, contact } from '../data/site';
+import { absoluteUrl, url } from '../lib/url';
+// With JS the form posts in the background and then opens the thanks page itself.
+// Without JS it is a plain POST and Web3Forms redirects (same-domain only on the free plan).
 ---
 
-<form class="form" action={form.endpoint} method="POST" novalidate data-contact-form>
+<form
+  class="form"
+  action={form.endpoint}
+  method="POST"
+  novalidate
+  data-contact-form
+  data-thanks={url(form.redirectPath)}
+  data-email={contact.email}
+  data-whatsapp={contact.whatsapp.href}
+>
   <input type="hidden" name="access_key" value={form.accessKey} />
   <input type="hidden" name="subject" value={form.subject} />
   <input type="hidden" name="from_name" value={site.name} />
@@ -20,7 +31,16 @@ import { absoluteUrl } from '../lib/url';
 
     <div class="field">
       <label for="f-email" class="label">Email <span aria-hidden="true">*</span></label>
-      <input id="f-email" name="email" type="email" autocomplete="email" required aria-describedby="f-email-error" />
+      <input
+        id="f-email"
+        name="email"
+        type="email"
+        autocomplete="email"
+        required
+        pattern="^[^\s@]+@[^\s@]+\.[^\s@]{2,}$"
+        data-invalid="Please enter a valid email address, e.g. name@example.com."
+        aria-describedby="f-email-error"
+      />
       <p class="field__error" id="f-email-error" data-error-for="f-email"></p>
     </div>
 
@@ -32,24 +52,39 @@ import { absoluteUrl } from '../lib/url';
         type="tel"
         autocomplete="tel"
         inputmode="tel"
-        placeholder="+91 or +971"
-        pattern="^\+?[0-9 ()\-]{7,20}$"
+        pattern="^\+?[0-9 \(\)\-]{7,20}$"
+        data-invalid="Please enter a valid phone number, including the country code."
         aria-describedby="f-phone-error"
       />
       <p class="field__error" id="f-phone-error" data-error-for="f-phone"></p>
     </div>
 
     <div class="field">
+      <label for="f-location" class="label">Project location</label>
+      <input id="f-location" name="project_location" type="text" placeholder="City, country" />
+    </div>
+
+    <div class="field">
       <label for="f-type" class="label">Project type</label>
-      <select id="f-type" name="project_type">
+      <select id="f-type" name="project_type" data-area-types={JSON.stringify(form.areaForTypes)}>
         <option value="">Select</option>
         {form.projectTypes.map((t) => <option>{t}</option>)}
       </select>
     </div>
 
-    <div class="field">
-      <label for="f-location" class="label">Project location</label>
-      <input id="f-location" name="project_location" type="text" placeholder="City, country" />
+    <div class="field" data-area-field>
+      <label for="f-area" class="label">Approx. area (sq ft)</label>
+      <input
+        id="f-area"
+        name="approx_area_sqft"
+        type="text"
+        inputmode="numeric"
+        placeholder="e.g. 2,500"
+        pattern="^[0-9][0-9, \.]{0,9}$"
+        data-invalid="Please enter the area as a number, e.g. 2500."
+        aria-describedby="f-area-error"
+      />
+      <p class="field__error" id="f-area-error" data-error-for="f-area"></p>
     </div>
 
     <div class="field">
@@ -74,7 +109,7 @@ import { absoluteUrl } from '../lib/url';
   </p>
 
   <button type="submit" class="button">Send enquiry</button>
-  <p class="form__status" role="status" data-form-status></p>
+  <p class="form__status" role="status" tabindex="-1" data-form-status></p>
 </form>
 
 <script is:inline src="https://web3forms.com/client/script.js" async defer></script>
@@ -99,6 +134,10 @@ import { absoluteUrl } from '../lib/url';
   .field {
     display: grid;
     gap: var(--space-1);
+  }
+
+  .field[hidden] {
+    display: none;
   }
 
   .field .label {
@@ -197,13 +236,14 @@ import { absoluteUrl } from '../lib/url';
   const messageFor = (field: HTMLInputElement | HTMLTextAreaElement) => {
     const v = field.validity;
     if (v.valueMissing) return 'Please fill in this field.';
-    if (v.typeMismatch && field.type === 'email') return 'Please enter a valid email address.';
-    if (v.patternMismatch) return 'Please enter a valid phone number, including the country code.';
+    if (v.typeMismatch || v.patternMismatch) return field.dataset.invalid || 'Please check this field.';
     return 'Please check this field.';
   };
 
   const validate = (field: HTMLInputElement | HTMLTextAreaElement) => {
     const error = formEl?.querySelector<HTMLElement>(`[data-error-for="${field.id}"]`);
+    // Stray spaces around an email or number shouldn't make it invalid
+    if (field.value !== field.value.trim()) field.value = field.value.trim();
     if (field.checkValidity()) {
       field.removeAttribute('aria-invalid');
       if (error) error.textContent = '';
@@ -225,17 +265,76 @@ import { absoluteUrl } from '../lib/url';
       }),
     );
 
-    formEl.addEventListener('submit', (event) => {
+    // "Approx. area" only for some project types. Hidden + disabled otherwise, so it's neither validated nor sent.
+    const typeSelect = formEl.querySelector<HTMLSelectElement>('#f-type');
+    const areaField = formEl.querySelector<HTMLElement>('[data-area-field]');
+    const areaInput = areaField?.querySelector<HTMLInputElement>('input');
+    if (typeSelect && areaField && areaInput) {
+      const areaTypes: string[] = JSON.parse(typeSelect.dataset.areaTypes || '[]');
+      const syncArea = () => {
+        const show = areaTypes.includes(typeSelect.value);
+        areaField.hidden = !show;
+        areaInput.disabled = !show;
+        if (!show) {
+          areaInput.removeAttribute('aria-invalid');
+          const error = formEl.querySelector<HTMLElement>('[data-error-for="f-area"]');
+          if (error) error.textContent = '';
+        }
+      };
+      typeSelect.addEventListener('change', syncArea);
+      syncArea();
+    }
+
+    const status = formEl.querySelector<HTMLElement>('[data-form-status]')!;
+    const button = formEl.querySelector<HTMLButtonElement>('button[type="submit"]')!;
+    const { thanks = '/contact/thanks/', email = '', whatsapp = '' } = formEl.dataset;
+
+    const showError = (reason: string) => {
+      status.textContent = '';
+      const lead = document.createElement('span');
+      lead.textContent = `Sorry, your enquiry couldn't be sent (${reason}). Please try again, or reach us by `;
+      const mail = Object.assign(document.createElement('a'), { href: `mailto:${email}`, textContent: 'email' });
+      const wa = Object.assign(document.createElement('a'), { href: whatsapp, textContent: 'WhatsApp' });
+      status.append(lead, mail, ' or ', wa, '.');
+      status.focus();
+    };
+
+    formEl.addEventListener('submit', async (event) => {
+      event.preventDefault();
       const invalid = fields.filter((field) => !validate(field));
       if (invalid.length) {
-        event.preventDefault();
         invalid[0].focus();
         return;
       }
-      const status = formEl.querySelector<HTMLElement>('[data-form-status]');
-      const button = formEl.querySelector<HTMLButtonElement>('button[type="submit"]');
-      if (status) status.textContent = 'Sending…';
-      if (button) button.disabled = true;
+
+      // Plain POST and redirect are the no-JS fallback; send JSON in the background instead.
+      const data = Object.fromEntries(new FormData(formEl));
+      delete data.redirect;
+
+      status.textContent = 'Sending…';
+      button.disabled = true;
+
+      try {
+        const controller = new AbortController();
+        const timeout = window.setTimeout(() => controller.abort(), 20000);
+        const response = await fetch(formEl.action, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: JSON.stringify(data),
+          signal: controller.signal,
+        });
+        window.clearTimeout(timeout);
+        const result = await response.json().catch(() => ({}));
+
+        if (response.ok && result.success) {
+          window.location.assign(thanks);
+          return;
+        }
+        showError(result.message || `error ${response.status}`);
+      } catch (error) {
+        showError(error instanceof DOMException && error.name === 'AbortError' ? 'the request timed out' : 'no connection');
+      }
+      button.disabled = false;
     });
   }
 </script>

@@ -41,14 +41,25 @@ let index = -1;
       <div class:list={['gallery__row', `gallery__row--${row.layout}`, row.layout !== 'full' && 'container', 'reveal']}>
         {row.items.map((item) => {
           index += 1;
+          // A portrait image on its own row is shown narrower so it doesn't run taller than the screen
+          const lonePortrait = row.items.length === 1 && item.layout !== 'full' && item.src.height > item.src.width;
           return (
-            <a href={item.full} class="gallery__item plain" data-lightbox-item data-index={index}>
+            <a
+              href={item.full}
+              class:list={['gallery__item', 'plain', { 'gallery__item--portrait': lonePortrait }]}
+              data-lightbox-item
+              data-index={index}
+            >
               <Picture
                 src={item.src}
                 alt={item.alt}
                 formats={['avif', 'webp']}
                 widths={[...widthsFor[item.layout]]}
-                sizes={sizesFor[row.items.length === 1 && item.layout === 'pair' ? 'inset' : item.layout]}
+                sizes={
+                  lonePortrait
+                    ? '(min-width: 48rem) 640px, calc(100vw - 2.5rem)'
+                    : sizesFor[row.items.length === 1 && item.layout === 'pair' ? 'inset' : item.layout]
+                }
                 loading="lazy"
                 decoding="async"
               />
@@ -90,6 +101,19 @@ let index = -1;
     margin-inline: auto;
   }
 
+  /* Lone portrait: narrower, and never taller than the screen */
+  .gallery__row .gallery__item--portrait {
+    width: fit-content;
+    max-width: min(40rem, 100%);
+    margin-inline: auto;
+  }
+
+  .gallery__item--portrait :global(img) {
+    width: auto;
+    max-width: 100%;
+    max-height: 85svh;
+  }
+
   .gallery__row--pair {
     display: grid;
     gap: var(--space-3);
@@ -100,6 +124,12 @@ let index = -1;
       grid-template-columns: 1fr 1fr;
       gap: var(--gutter);
       align-items: start;
+    }
+
+    /* Side-by-side images share one shape so their edges line up */
+    .gallery__row--pair:not(:has(> :only-child)) .gallery__item :global(img) {
+      aspect-ratio: 4 / 5;
+      object-fit: cover;
     }
 
     .gallery__row--pair:has(> :only-child) {

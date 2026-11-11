@@ -22,7 +22,7 @@ gallery:
   - { src: ./images/03.jpg, alt: "[TBC: Describe the space]", layout: pair }
   - { src: ./images/04.jpg, alt: "[TBC: Describe the space]", layout: inset }
   - { src: ./images/05.jpg, alt: "[TBC: Describe the space]", layout: full }
-draft: false
+draft: true # placeholder: hidden until a real project replaces it
 ---
 
 ## The brief

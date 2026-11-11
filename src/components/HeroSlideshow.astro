@@ -1,0 +1,288 @@
+---
+// Full-bleed hero that cross-fades through slides on a loop.
+// A slide is one image, or (on wide screens) two portrait images side by side.
+// Pauses while its buttons have keyboard focus, when the tab is hidden, and via the pause button (WCAG 2.2.2).
+// With prefers-reduced-motion it does not autoplay; the buttons still step through slides.
+import { Picture } from 'astro:assets';
+import { heroWidths, heroSizes } from '../lib/hero';
+import type { HeroSlide } from '../data/hero';
+
+export interface Props {
+  slides: HeroSlide[];
+  intervalSeconds: number;
+  fadeMs: number;
+}
+
+const { slides, intervalSeconds, fadeMs } = Astro.props;
+const many = slides.length > 1;
+const pairSizes = '(min-width: 64rem) 50vw, 100vw';
+const pairWidths = [480, 720, 960, 1280, 1600];
+---
+
+<section
+  class="slideshow"
+  aria-roledescription="carousel"
+  aria-label="Featured work"
+  data-slideshow
+  data-interval={Math.round(intervalSeconds * 1000)}
+  style={`--fade: ${fadeMs}ms`}
+>
+  <div class="slideshow__track" aria-live="off" data-track>
+    {
+      slides.map((slide, i) => (
+        <div
+          class:list={[
+            'slideshow__slide',
+            { 'is-active': i === 0, 'slideshow__slide--pair': slide.images.length > 1 },
+            slide.only && `only-${slide.only}`,
+          ]}
+          role="group"
+          aria-roledescription="slide"
+          data-slide
+        >
+          {slide.images.map((image) => (
+            <Picture
+              src={image.src}
+              alt={image.alt}
+              formats={['avif', 'webp']}
+              widths={slide.images.length > 1 ? pairWidths : heroWidths}
+              sizes={slide.images.length > 1 ? pairSizes : heroSizes}
+              loading={i === 0 ? 'eager' : 'lazy'}
+              fetchpriority={i === 0 ? 'high' : 'low'}
+              decoding="async"
+              style={`--focus: ${image.focus}; --focus-m: ${image.focusMobile}`}
+            />
+          ))}
+        </div>
+      ))
+    }
+  </div>
+
+  <div class="slideshow__controls container">
+    <div class="slideshow__caption"><slot /></div>
+    {
+      many && (
+        <div class="slideshow__nav">
+          <p class="label slideshow__count" aria-hidden="true">
+            <span data-current>01</span> / <span data-total>{String(slides.length).padStart(2, '0')}</span>
+          </p>
+          <button type="button" class="slideshow__btn label" data-prev aria-label="Previous image">
+            Prev
+          </button>
+          <button type="button" class="slideshow__btn label" data-toggle aria-label="Pause slideshow">
+            Pause
+          </button>
+          <button type="button" class="slideshow__btn label" data-next aria-label="Next image">
+            Next
+          </button>
+        </div>
+      )
+    }
+  </div>
+</section>
+
+<style>
+  .slideshow__track {
+    position: relative;
+    background: var(--stone);
+    height: min(78svh, 133vw);
+    min-height: 22rem;
+    overflow: hidden;
+  }
+
+  .slideshow__slide {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity var(--fade) ease-in-out;
+  }
+
+  .slideshow__slide.is-active {
+    opacity: 1;
+  }
+
+  .slideshow__slide :global(picture) {
+    display: block;
+    width: 100%;
+    height: 100%;
+    min-width: 0;
+  }
+
+  .slideshow__slide :global(img) {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: var(--focus-m, var(--focus, 50% 50%));
+  }
+
+  /* Phones and tablets: portrait pairs are replaced by their single slides */
+  .only-wide {
+    display: none;
+  }
+
+  @media (min-width: 64rem) {
+    .slideshow__track {
+      height: min(88svh, 60vw);
+    }
+
+    .only-wide {
+      display: block;
+    }
+
+    .only-narrow {
+      display: none;
+    }
+
+    .slideshow__slide :global(img) {
+      object-position: var(--focus, 50% 50%);
+    }
+
+    .slideshow__slide--pair.only-wide {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      grid-template-rows: minmax(0, 1fr);
+      gap: 6px;
+      background: var(--paper);
+    }
+  }
+
+  .slideshow__controls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-1) var(--space-3);
+    padding-top: var(--space-2);
+  }
+
+  .slideshow__nav {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  .slideshow__count {
+    font-variant-numeric: tabular-nums;
+    margin-right: var(--space-1);
+  }
+
+  .slideshow__btn {
+    min-height: 2.75rem;
+    min-width: 2.75rem;
+    padding: 0 0.25rem;
+    border: 0;
+    background: none;
+    color: var(--ink);
+    cursor: pointer;
+  }
+
+  .slideshow__btn:hover {
+    text-decoration: underline;
+    text-underline-offset: 0.3em;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .slideshow__slide {
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-slideshow]').forEach((root) => {
+    const all = Array.from(root.querySelectorAll<HTMLElement>('[data-slide]'));
+    const toggle = root.querySelector<HTMLButtonElement>('[data-toggle]');
+    if (all.length < 2 || !toggle) return;
+
+    const interval = Number(root.dataset.interval) || 3000;
+    const current = root.querySelector<HTMLElement>('[data-current]');
+    const total = root.querySelector<HTMLElement>('[data-total]');
+    const track = root.querySelector<HTMLElement>('[data-track]')!;
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const pad = (n: number) => String(n).padStart(2, '0');
+
+    let slides: HTMLElement[] = [];
+    let index = 0;
+    let timer: number | undefined;
+    let userPaused = reduced; // no autoplay under reduced motion
+    let focusPaused = false;
+
+    const loadImages = (slide?: HTMLElement) =>
+      slide?.querySelectorAll('img').forEach((img) => img.setAttribute('loading', 'eager'));
+
+    const show = (i: number) => {
+      slides[index]?.classList.remove('is-active');
+      slides[index]?.setAttribute('aria-hidden', 'true');
+      index = (i + slides.length) % slides.length;
+      const slide = slides[index];
+      loadImages(slide);
+      slide.classList.add('is-active');
+      slide.removeAttribute('aria-hidden');
+      if (current) current.textContent = pad(index + 1);
+      loadImages(slides[(index + 1) % slides.length]); // warm up the next one
+    };
+
+    // Work out which slides apply at this screen width (pairs vs singles)
+    const rebuild = () => {
+      all.forEach((s) => {
+        s.classList.remove('is-active');
+        s.setAttribute('aria-hidden', 'true');
+      });
+      slides = all.filter((s) => getComputedStyle(s).display !== 'none');
+      slides.forEach((s, i) => s.setAttribute('aria-label', `${i + 1} of ${slides.length}`));
+      if (total) total.textContent = pad(slides.length);
+      index = 0;
+      show(0);
+    };
+
+    const stop = () => {
+      window.clearInterval(timer);
+      timer = undefined;
+    };
+
+    const start = () => {
+      stop();
+      if (userPaused || focusPaused || document.hidden || slides.length < 2) return;
+      timer = window.setInterval(() => show(index + 1), interval);
+    };
+
+    const setPaused = (paused: boolean) => {
+      userPaused = paused;
+      toggle.textContent = paused ? 'Play' : 'Pause';
+      toggle.setAttribute('aria-label', paused ? 'Play slideshow' : 'Pause slideshow');
+      // Announce slide changes only when the user is driving
+      track.setAttribute('aria-live', paused ? 'polite' : 'off');
+      start();
+    };
+
+    root.querySelector('[data-next]')?.addEventListener('click', () => {
+      show(index + 1);
+      start();
+    });
+    root.querySelector('[data-prev]')?.addEventListener('click', () => {
+      show(index - 1);
+      start();
+    });
+    toggle.addEventListener('click', () => setPaused(!userPaused));
+
+    root.addEventListener('focusin', () => {
+      focusPaused = true;
+      stop();
+    });
+    root.addEventListener('focusout', (e) => {
+      if (!root.contains(e.relatedTarget as Node)) {
+        focusPaused = false;
+        start();
+      }
+    });
+    document.addEventListener('visibilitychange', start);
+    window.matchMedia('(min-width: 64rem)').addEventListener('change', () => {
+      rebuild();
+      start();
+    });
+
+    rebuild();
+    setPaused(userPaused);
+  });
+</script>

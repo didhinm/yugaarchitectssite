@@ -10,9 +10,9 @@ const { data } = Astro.props.project;
 const facts: [string, string | undefined][] = [
   ['Type', data.typeLabel],
   ['Location', data.location],
-  ['Year', data.year ? String(data.year) : '[TBC]'],
+  ['Year', data.year ? String(data.year) : undefined],
   ['Status', data.status === 'completed' ? 'Completed' : 'Ongoing'],
-  ['Built-up area', data.area],
+  [data.areaLabel, data.area],
   ['Scope', data.scope.length ? data.scope.join(', ') : undefined],
   ['Photographer', data.photographer],
 ];

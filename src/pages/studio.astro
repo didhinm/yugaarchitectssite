@@ -4,53 +4,50 @@ import { url } from '../lib/url';
 import CTA from '../components/CTA.astro';
 import { site, address, contact, process } from '../data/site';
 
-// [TBC] Approach principles: to be written with the client.
-const principles = [
-  { title: '[TBC: Principle one]', text: '[TBC: One or two sentences.]' },
-  { title: '[TBC: Principle two]', text: '[TBC: One or two sentences.]' },
-  { title: '[TBC: Principle three]', text: '[TBC: One or two sentences.]' },
-];
+// About copy supplied by the studio (11 Nov 2026). Keep wording as given.
+const vision = ['climatically responsible', 'spatially functional', 'aesthetically timeless'];
 ---
 
 <BaseLayout
   title="Studio"
-  description={`${site.name} is an architecture and interiors studio in ${address.locality}, ${address.region}, working on projects across India and the UAE.`}
+  description={`${site.name}, founded by ${site.founder}, designs functional, climate-responsive and timeless spaces from ${address.locality}, ${address.region}, for clients across India and the UAE.`}
 >
   <header class="container page-head">
-    <p class="label">Studio</p>
-    <h1>{site.tagline}</h1>
+    <p class="label">About {site.name}</p>
+    <h1>Designing spaces that inspire, connect and belong.</h1>
     <p class="lead">
-      [TBC: Opening statement on what “Yuga” means to the studio and the idea behind the tagline.]
+      {site.name} was founded by {site.founder} with a vision to create spaces that translate clients’ dreams into
+      reality. Our approach goes beyond aesthetics, focusing on creating environments that are functional,
+      comfortable, and beautiful to live in.
     </p>
   </header>
 
-  <section class="section section--stone" aria-labelledby="approach-heading">
+  <section class="section section--stone" aria-labelledby="belief-heading">
     <div class="container grid">
-      <h2 id="approach-heading" class="studio__aside label">Approach</h2>
-      <ol role="list" class="principles">
-        {
-          principles.map((p, i) => (
-            <li class="principle reveal">
-              <span class="label">{String(i + 1).padStart(2, '0')}</span>
-              <h3>{p.title}</h3>
-              <p>{p.text}</p>
-            </li>
-          ))
-        }
-      </ol>
+      <h2 id="belief-heading" class="studio__aside label">Our belief</h2>
+      <div class="studio__main reveal">
+        <blockquote class="quote">
+          <p>“Every inch of space deserves to be thoughtfully designed.”</p>
+        </blockquote>
+        <p class="studio__text">
+          This belief forms the foundation of {site.name}. We see architecture as a unique expression of each
+          client’s aspirations, lifestyle, and needs, where every space has a purpose and every detail contributes to
+          the larger experience.
+        </p>
+      </div>
     </div>
   </section>
 
-  <section class="section" aria-labelledby="where-heading">
+  <section class="section" aria-labelledby="philosophy-heading">
     <div class="container grid">
-      <h2 id="where-heading" class="studio__aside label">Where we work</h2>
-      <div class="studio__main prose reveal">
-        <p class="lead">
-          The studio is based in {address.locality}, {address.region}, and takes on projects across India and the
-          UAE.
-        </p>
-        <p>
-          {contact.visits} <a href={url('/contact/')}>Get in touch</a> to arrange a meeting at the studio or a call.
+      <h2 id="philosophy-heading" class="studio__aside label">Philosophy</h2>
+      <div class="studio__main reveal">
+        <p class="studio__statement">Our design philosophy is deeply rooted in harmony with nature.</p>
+        <p class="studio__text">
+          We strive to create sustainable and
+          climate-responsive spaces by thoughtfully integrating natural light, ventilation, and the surrounding
+          environment into our designs. Capturing these natural elements and using them strategically is central to
+          our architectural approach.
         </p>
       </div>
     </div>
@@ -60,10 +57,42 @@ const principles = [
     <div class="container grid">
       <h2 id="process-heading" class="studio__aside label">Process</h2>
       <div class="studio__main reveal">
+        <p class="studio__text studio__text--first">
+          At the heart of every project lies the process of uncovering our clients’ dreams and translating them into
+          meaningful spaces. We believe that good architecture is not just about creating visually appealing
+          structures, but about shaping experiences and enhancing the way people live.
+        </p>
         <ol role="list" class="process-inline">
           {process.map((step) => <li>{step.title}</li>)}
         </ol>
-        <p class="process-more"><a href={url('/services/')}>Services and process</a></p>
+        <p class="studio__more"><a href={url('/services/')}>Services and process</a></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--stone" aria-labelledby="vision-heading">
+    <div class="container grid">
+      <h2 id="vision-heading" class="studio__aside label">Vision</h2>
+      <div class="studio__main reveal">
+        <p class="studio__text studio__text--first">
+          At {site.name}, our vision is to create spaces that are
+        </p>
+        <ul role="list" class="vision">
+          {vision.map((v, i) => <li>{v}{i < vision.length - 2 ? ',' : i === vision.length - 2 ? ', and' : '.'}</li>)}
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="where-heading">
+    <div class="container grid">
+      <h2 id="where-heading" class="studio__aside label">Where we work</h2>
+      <div class="studio__main reveal">
+        <p class="studio__text studio__text--first">
+          The studio is based in {address.locality}, {address.region}, and takes on projects across India and the
+          UAE. {contact.visits} <a href={url('/contact/')}>Get in touch</a> to arrange a meeting at the studio or a
+          call.
+        </p>
       </div>
     </div>
   </section>
@@ -78,40 +107,73 @@ const principles = [
     margin-bottom: var(--space-3);
   }
 
-  .studio__main,
-  .principles {
+  .studio__main {
     grid-column: 1 / -1;
   }
 
-  .principles {
-    display: grid;
-    gap: var(--space-5);
-  }
-
-  .principle > * + * {
-    margin-top: var(--space-1);
-  }
-
-  .principle h3 {
-    margin-top: var(--space-2);
-  }
-
-  .process-inline {
-    font-family: var(--font-heading);
-    font-weight: 300;
-    font-size: var(--size-h2);
-    line-height: 1.3;
-  }
-
-  .process-more {
+  .studio__text {
+    max-width: var(--measure);
     margin-top: var(--space-4);
   }
 
-  @media (min-width: 48rem) {
-    .principles {
-      grid-template-columns: 1fr 1fr;
-      column-gap: var(--gutter);
-    }
+  .studio__text--first {
+    margin-top: 0;
+  }
+
+  .quote p,
+  .studio__statement {
+    font-family: var(--font-heading);
+    font-weight: 300;
+    font-size: var(--size-h2);
+    line-height: 1.2;
+    text-wrap: balance;
+  }
+
+  .quote {
+    margin: 0;
+  }
+
+  .process-inline {
+    margin-top: var(--space-4);
+    font-family: var(--font-heading);
+    font-weight: 300;
+    font-size: var(--size-h3);
+    line-height: 1.5;
+    counter-reset: step;
+  }
+
+  .process-inline li {
+    counter-increment: step;
+    display: flex;
+    gap: var(--space-2);
+    padding-block: var(--space-1);
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .process-inline li::before {
+    content: counter(step, decimal-leading-zero);
+    font-size: var(--size-label);
+    font-weight: 500;
+    letter-spacing: var(--tracking-label);
+    color: var(--muted);
+    padding-top: 0.35em;
+    min-width: 2rem;
+  }
+
+  .studio__more {
+    margin-top: var(--space-3);
+  }
+
+  .vision {
+    margin-top: var(--space-2);
+    font-family: var(--font-heading);
+    font-weight: 300;
+    font-size: var(--size-h2);
+    line-height: 1.25;
+  }
+
+  .vision li + li {
+    margin-top: var(--space-1);
   }
 
   @media (min-width: 64rem) {
@@ -120,8 +182,7 @@ const principles = [
       margin-bottom: 0;
     }
 
-    .studio__main,
-    .principles {
+    .studio__main {
       grid-column: 5 / span 8;
     }
   }

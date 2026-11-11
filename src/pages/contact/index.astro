@@ -1,7 +1,16 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import ContactForm from '../../components/ContactForm.astro';
+import Icon from '../../components/Icon.astro';
 import { contact, address, hours } from '../../data/site';
+
+const direct = [
+  { icon: 'mail', label: 'Email', href: `mailto:${contact.email}`, text: contact.email },
+  { icon: 'whatsapp', label: 'WhatsApp', href: contact.whatsapp.href, text: contact.whatsapp.display },
+  { icon: 'phone', label: 'Call India', href: contact.phoneIndia.href, text: contact.phoneIndia.display },
+  { icon: 'phone', label: 'Call UAE', href: contact.phoneUae.href, text: contact.phoneUae.display },
+  { icon: 'instagram', label: 'Instagram', href: contact.instagram.href, text: contact.instagram.handle },
+] as const;
 ---
 
 <BaseLayout
@@ -25,13 +34,19 @@ import { contact, address, hours } from '../../data/site';
     <aside class="contact__direct" aria-label="Direct contact">
       <div class="block">
         <h2 class="label contact__heading">Direct</h2>
-        <dl class="direct">
-          <div><dt class="label">Email</dt><dd><a href={`mailto:${contact.email}`}>{contact.email}</a></dd></div>
-          <div><dt class="label">WhatsApp</dt><dd><a href={contact.whatsapp.href}>{contact.whatsapp.display}</a></dd></div>
-          <div><dt class="label">Call India</dt><dd><a href={contact.phoneIndia.href}>{contact.phoneIndia.display}</a></dd></div>
-          <div><dt class="label">Call UAE</dt><dd><a href={contact.phoneUae.href}>{contact.phoneUae.display}</a></dd></div>
-          <div><dt class="label">Instagram</dt><dd><a href={contact.instagram.href}>{contact.instagram.handle}</a></dd></div>
-        </dl>
+        <ul role="list" class="direct">
+          {
+            direct.map((item) => (
+              <li>
+                <a href={item.href} class="direct__link plain">
+                  <Icon name={item.icon} size={22} class="direct__icon" />
+                  <span class="label direct__label">{item.label}</span>
+                  <span class="direct__text">{item.text}</span>
+                </a>
+              </li>
+            ))
+          }
+        </ul>
       </div>
 
       <div class="block">
@@ -83,12 +98,55 @@ import { contact, address, hours } from '../../data/site';
     font-style: normal;
   }
 
-  .direct > div + div {
-    margin-top: var(--space-2);
+  .direct li + li {
+    margin-top: var(--space-1);
   }
 
-  .direct dd {
-    margin: 0;
+  /* Icon on the left, spanning the label and value lines */
+  .direct__link {
+    display: grid;
+    grid-template-columns: 2.5rem 1fr;
+    grid-template-rows: auto auto;
+    column-gap: var(--space-2);
+    align-items: center;
+    padding-block: var(--space-1);
+    color: var(--ink);
+  }
+
+  .direct__link :global(.direct__icon) {
+    grid-row: 1 / span 2;
+    justify-self: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    padding: 0.5625rem;
+    border: 1px solid var(--rule);
+    border-radius: 50%;
+    color: var(--ink);
+    transition: background-color var(--duration) var(--ease-out), color var(--duration) var(--ease-out),
+      border-color var(--duration) var(--ease-out);
+  }
+
+  .direct__label {
+    align-self: end;
+  }
+
+  .direct__text {
+    align-self: start;
+    overflow-wrap: anywhere;
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.2em;
+    transition: text-underline-offset var(--duration) var(--ease-out);
+  }
+
+  .direct__link:hover .direct__text {
+    text-underline-offset: 0.35em;
+  }
+
+  .direct__link:hover :global(.direct__icon) {
+    background: var(--ink);
+    border-color: var(--ink);
+    color: var(--paper);
   }
 
   @media (min-width: 64rem) {

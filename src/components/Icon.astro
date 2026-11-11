@@ -1,0 +1,26 @@
+---
+// Functional contact icons (Tabler Icons outline set, MIT), inlined at build time. Decorative: hidden from screen readers.
+import mail from '@tabler/icons/outline/mail.svg?raw';
+import phone from '@tabler/icons/outline/phone.svg?raw';
+import whatsapp from '@tabler/icons/outline/brand-whatsapp.svg?raw';
+import instagram from '@tabler/icons/outline/brand-instagram.svg?raw';
+import mapPin from '@tabler/icons/outline/map-pin.svg?raw';
+import clock from '@tabler/icons/outline/clock.svg?raw';
+
+const icons = { mail, phone, whatsapp, instagram, 'map-pin': mapPin, clock } as const;
+
+export interface Props {
+  name: keyof typeof icons;
+  size?: number;
+  class?: string;
+}
+
+const { name, size = 20, class: className } = Astro.props;
+
+const svg = icons[name]
+  .replace(/<!--[\s\S]*?-->/g, '')
+  .replace(/\s(width|height|class|stroke-width)="[^"]*"/g, '')
+  .replace('<svg', `<svg width="${size}" height="${size}" stroke-width="1.5" aria-hidden="true" focusable="false" class="icon${className ? ` ${className}` : ''}"`);
+---
+
+<Fragment set:html={svg} />

@@ -1,17 +1,26 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { url } from '../lib/url';
-import Hero from '../components/Hero.astro';
+import HeroSlideshow from '../components/HeroSlideshow.astro';
 import ProjectTile from '../components/ProjectTile.astro';
 import CTA from '../components/CTA.astro';
 import { getPublishedProjects, type Project } from '../lib/projects';
 import { heroPreload } from '../lib/hero';
 import { site, services, founderPublished } from '../data/site';
+import { getHeroImages, toSlides, heroSettings, type HeroImage } from '../data/hero';
 
 const projects = await getPublishedProjects();
-// Hero = the first project in `order` until the client picks one (brief §9, decision 3).
-const heroProject = projects[0];
-const preload = heroProject ? await heroPreload(heroProject.data.cover) : undefined;
+
+// Hero slideshow from src/assets/hero/. Until images are added there, fall back to the first project's cover.
+const heroImages: HeroImage[] = getHeroImages();
+if (!heroImages.length && projects[0]) {
+  const { cover, coverAlt, coverFocus } = projects[0].data;
+  heroImages.push({ src: cover, alt: coverAlt, focus: coverFocus, focusMobile: coverFocus, file: projects[0].id, portrait: false });
+}
+const slides = toSlides(heroImages);
+// Preload the first slide's image when it's a single full-width image (the LCP element).
+const first = slides[0]?.images.length === 1 ? slides[0].images[0] : undefined;
+const preload = first ? await heroPreload(first.src) : undefined;
 
 // Alternate full-width and 2-up rows; a lone item at the end goes full width.
 const rows: { size: 'full' | 'half'; items: Project[] }[] = [];
@@ -28,20 +37,14 @@ for (let i = 0; i < projects.length; ) {
 }
 ---
 
-<BaseLayout preload={preload} image={heroProject?.data.cover} imageAlt={heroProject?.data.coverAlt}>
+<BaseLayout preload={preload} image={heroImages[0]?.src} imageAlt={heroImages[0]?.alt}>
   <h1 class="visually-hidden">{site.name}: architecture and interiors studio, Palakkad, Kerala</h1>
 
   {
-    heroProject && (
-      <section aria-label="Featured project">
-        <Hero src={heroProject.data.cover} alt={heroProject.data.coverAlt} focus={heroProject.data.coverFocus} />
-        <div class="container hero-caption">
-          <p class="hero-caption__tagline">{site.tagline}</p>
-          <a href={url(`/projects/${heroProject.data.slug}/`)} class="label hero-caption__project">
-            {heroProject.data.title}
-          </a>
-        </div>
-      </section>
+    slides.length > 0 && (
+      <HeroSlideshow slides={slides} intervalSeconds={heroSettings.intervalSeconds} fadeMs={heroSettings.fadeMs}>
+        <p class="hero-tagline">{site.tagline}</p>
+      </HeroSlideshow>
     )
   }
 
@@ -102,27 +105,10 @@ for (let i = 0; i < projects.length; ) {
 </BaseLayout>
 
 <style>
-  .hero-caption {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: var(--space-1) var(--space-3);
-    padding-top: var(--space-2);
-  }
-
-  .hero-caption__tagline {
+  .hero-tagline {
     font-family: var(--font-heading);
     font-weight: 300;
     font-size: var(--size-h3);
-  }
-
-  .hero-caption__project {
-    text-decoration: none;
-  }
-
-  .hero-caption__project:hover {
-    text-decoration: underline;
   }
 
   .intro__text {

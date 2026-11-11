@@ -30,7 +30,8 @@
   background: var(--stone);
 }
 
-.section + .section:not(.section--stone) {
+/* Two white sections in a row share one gap; after a stone band, keep the full gap. */
+.section:not(.section--stone) + .section:not(.section--stone) {
   padding-top: 0;
 }
 

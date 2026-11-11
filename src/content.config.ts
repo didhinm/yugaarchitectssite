@@ -8,6 +8,8 @@ const projects = defineCollection({
   schema: ({ image }) =>
     z.object({
       title: z.string(),
+      /** One-line descriptor shown under the title on the project page. */
+      subtitle: z.string().optional(),
       slug: z.string().regex(/^[a-z0-9-]+$/),
       type: z.enum(['residential', 'commercial', 'interiors', 'hospitality', 'renovation']),
       typeLabel: z.string(),
@@ -17,6 +19,8 @@ const projects = defineCollection({
       year: z.number().int().min(1990).max(2100).optional(),
       status: z.enum(['completed', 'ongoing']),
       area: z.string().optional(),
+      /** Label for `area` in the facts panel, e.g. "Total area". */
+      areaLabel: z.string().default('Built-up area'),
       scope: z.array(z.string()).default([]),
       photographer: z.string().optional(),
       order: z.number().int(),

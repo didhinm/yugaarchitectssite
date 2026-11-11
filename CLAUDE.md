@@ -18,7 +18,8 @@ Live at **https://yugaarchitects.in**.
 ## Commands
 ```bash
 npm install
-npm run dev        # http://localhost:4321
+npm run dev        # http://localhost:4321 (shows the holding page while it's on)
+npm run dev:site   # same, but shows the full site regardless of the holding switch
 npm run build      # outputs to dist/
 npm run preview
 npm run check      # astro check (types + content schema)
@@ -47,8 +48,9 @@ docs/              design-brief.md
 ## Rules
 - **All firm facts come from `src/data/site.ts`.** Never hard-code a phone number, email, address or tagline in a component.
 - Design tokens only: use `var(--ink)` etc. Don't add new colours, fonts or font weights without updating the brief.
-- Photography leads. No gradients over images, no stock photos, no decorative icons, no autoplay carousels, no parallax.
-- Motion: subtle fades only, ≤300 ms, disabled under `prefers-reduced-motion`.
+- Photography leads. No gradients over images, no stock photos, no decorative icons, no parallax. No autoplay carousels except the home hero slideshow.
+- Motion: subtle fades only, ≤300 ms, disabled under `prefers-reduced-motion`. Exception: the hero slideshow cross-fade (settings in `src/data/hero.ts`).
+- Hero images: drop them in `src/assets/hero/` (named so they sort in order, e.g. `01-…jpg`) and add alt text in `heroDetails` in `src/data/hero.ts`.
 - Mobile-first CSS. Test at 375 px, 768 px, 1280 px and 1600 px.
 - Minimal JS: ship only what the menu, lightbox and form need. Prefer `<script>` in components over UI frameworks. No React/Vue.
 - Every image needs descriptive `alt` text, explicit dimensions, and lazy loading below the fold. Preload the hero image.

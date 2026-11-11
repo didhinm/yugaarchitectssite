@@ -64,6 +64,7 @@ const creativeWork = {
       <header class="project-head__title">
         <p class="label">{data.typeLabel}</p>
         <h1>{data.title}</h1>
+        {data.subtitle && <p class="project-subtitle">{data.subtitle}</p>}
         <p class="muted">{data.location}, {countryNames[data.country]}</p>
       </header>
       <div class="project-head__facts">
@@ -111,6 +112,14 @@ const creativeWork = {
 
   .project-head__title > * + * {
     margin-top: var(--space-2);
+  }
+
+  .project-subtitle {
+    font-family: var(--font-heading);
+    font-weight: 300;
+    font-size: var(--size-h3);
+    line-height: 1.4;
+    max-width: 32ch;
   }
 
   .project-body {

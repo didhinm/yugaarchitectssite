@@ -72,8 +72,8 @@ export const founderPublished = false;
 
 export const form = {
   endpoint: 'https://api.web3forms.com/submit',
-  // Public-safe Web3Forms key. Replace before launch.
-  accessKey: '[TBC: WEB3FORMS_ACCESS_KEY]',
+  // Web3Forms access key. Public-safe by design: it only lets people send enquiries to the studio inbox.
+  accessKey: 'e8d15d37-7ddf-4ce0-90fc-dd1a12ae6e0e',
   // Path only; ContactForm turns it into an absolute URL on the deployed site.
   redirectPath: '/contact/thanks/',
   subject: 'New enquiry from the Yuga Architects website',
@@ -85,6 +85,8 @@ export const form = {
     'Renovation',
     'Other',
   ],
+  /** Project types that show the "Approx. area (sq ft)" field. */
+  areaForTypes: ['Residential / Villa', 'Interiors', 'Renovation'],
   timelines: [
     'As soon as possible',
     'Within 3 months',
