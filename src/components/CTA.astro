@@ -1,5 +1,6 @@
 ---
 import { contact } from '../data/site';
+import { url } from '../lib/url';
 
 export interface Props {
   heading?: string;
@@ -14,7 +15,7 @@ const { heading = 'Planning a home, workplace or renovation?' } = Astro.props;
       <h2 id="cta-heading">{heading}</h2>
       <p class="muted cta__text">Tell us about your site, your brief and your timeline. We work across India and the UAE.</p>
       <div class="cta__actions">
-        <a href="/contact/" class="button">Start a conversation</a>
+        <a href={url('/contact/')} class="button">Start a conversation</a>
         <a href={contact.whatsapp.href} class="button button--ghost">WhatsApp</a>
       </div>
     </div>

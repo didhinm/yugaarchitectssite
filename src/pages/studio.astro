@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { url } from '../lib/url';
 import CTA from '../components/CTA.astro';
 import { site, address, contact, process } from '../data/site';
 
@@ -49,7 +50,7 @@ const principles = [
           UAE.
         </p>
         <p>
-          {contact.visits} <a href="/contact/">Get in touch</a> to arrange a meeting at the studio or a call.
+          {contact.visits} <a href={url('/contact/')}>Get in touch</a> to arrange a meeting at the studio or a call.
         </p>
       </div>
     </div>
@@ -62,7 +63,7 @@ const principles = [
         <ol role="list" class="process-inline">
           {process.map((step) => <li>{step.title}</li>)}
         </ol>
-        <p class="process-more"><a href="/services/">Services and process</a></p>
+        <p class="process-more"><a href={url('/services/')}>Services and process</a></p>
       </div>
     </div>
   </section>

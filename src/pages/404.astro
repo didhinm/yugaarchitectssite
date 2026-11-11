@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { url } from '../lib/url';
 ---
 
 <BaseLayout title="Page not found" description="This page could not be found." noindex>
@@ -8,8 +9,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     <h1>This page could not be found</h1>
     <p class="lead">It may have moved. Try the projects or get in touch.</p>
     <p class="notfound__links">
-      <a href="/" class="button">Home</a>
-      <a href="/projects/" class="button button--ghost">Projects</a>
+      <a href={url('/')} class="button">Home</a>
+      <a href={url('/projects/')} class="button button--ghost">Projects</a>
     </p>
   </header>
 </BaseLayout>

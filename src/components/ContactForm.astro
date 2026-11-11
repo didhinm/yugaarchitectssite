@@ -1,12 +1,13 @@
 ---
 import { form, site } from '../data/site';
+import { absoluteUrl } from '../lib/url';
 ---
 
 <form class="form" action={form.endpoint} method="POST" novalidate data-contact-form>
   <input type="hidden" name="access_key" value={form.accessKey} />
   <input type="hidden" name="subject" value={form.subject} />
   <input type="hidden" name="from_name" value={site.name} />
-  <input type="hidden" name="redirect" value={form.redirect} />
+  <input type="hidden" name="redirect" value={absoluteUrl(form.redirectPath)} />
   <!-- Honeypot: humans never see or fill this -->
   <input type="checkbox" name="botcheck" class="visually-hidden" tabindex="-1" autocomplete="off" aria-hidden="true" />
 

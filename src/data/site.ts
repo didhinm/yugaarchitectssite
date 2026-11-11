@@ -74,8 +74,9 @@ export const form = {
   endpoint: 'https://api.web3forms.com/submit',
   // Public-safe Web3Forms key. Replace before launch.
   accessKey: '[TBC: WEB3FORMS_ACCESS_KEY]',
-  redirect: 'https://yugaarchitects.in/contact/thanks/',
-  subject: 'New enquiry from yugaarchitects.in',
+  // Path only; ContactForm turns it into an absolute URL on the deployed site.
+  redirectPath: '/contact/thanks/',
+  subject: 'New enquiry from the Yuga Architects website',
   projectTypes: [
     'Residential / Villa',
     'Commercial / Office',

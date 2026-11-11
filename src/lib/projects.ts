@@ -1,4 +1,5 @@
 import { getCollection, type CollectionEntry } from 'astro:content';
+import { url } from './url';
 
 export type Project = CollectionEntry<'projects'>;
 
@@ -17,7 +18,7 @@ export async function getPublishedProjects(): Promise<Project[]> {
 }
 
 export function projectHref(project: Project): string {
-  return `/projects/${project.data.slug}/`;
+  return url(`/projects/${project.data.slug}/`);
 }
 
 export const countryNames = { IN: 'India', AE: 'United Arab Emirates' } as const;

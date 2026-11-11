@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { url } from '../lib/url';
 import Hero from '../components/Hero.astro';
 import ProjectTile from '../components/ProjectTile.astro';
 import CTA from '../components/CTA.astro';
@@ -36,7 +37,7 @@ for (let i = 0; i < projects.length; ) {
         <Hero src={heroProject.data.cover} alt={heroProject.data.coverAlt} focus={heroProject.data.coverFocus} />
         <div class="container hero-caption">
           <p class="hero-caption__tagline">{site.tagline}</p>
-          <a href={`/projects/${heroProject.data.slug}/`} class="label hero-caption__project">
+          <a href={url(`/projects/${heroProject.data.slug}/`)} class="label hero-caption__project">
             {heroProject.data.title}
           </a>
         </div>
@@ -48,7 +49,7 @@ for (let i = 0; i < projects.length; ) {
     <div class="container grid">
       <p class="intro__text reveal">
         Yuga Architects is an architecture and interiors studio in Palakkad, Kerala, working on homes, workplaces
-        and renovations across India and the UAE. <a href="/studio/">About the studio</a>
+        and renovations across India and the UAE. <a href={url('/studio/')}>About the studio</a>
       </p>
     </div>
   </section>
@@ -57,7 +58,7 @@ for (let i = 0; i < projects.length; ) {
     <div class="container">
       <div class="section-head">
         <h2 id="work-heading" class="label">Selected work</h2>
-        <a href="/projects/" class="label">All projects</a>
+        <a href={url('/projects/')} class="label">All projects</a>
       </div>
       <div class="work__rows">
         {
@@ -82,7 +83,7 @@ for (let i = 0; i < projects.length; ) {
         {services.map((s) => <li>{s.title}</li>)}
       </ul>
       <p class="services__more">
-        <a href="/services/" class="label">Services and process</a>
+        <a href={url('/services/')} class="label">Services and process</a>
       </p>
     </div>
   </section>
@@ -91,7 +92,7 @@ for (let i = 0; i < projects.length; ) {
     founderPublished && (
       <section class="section founder-teaser" aria-label="Founder">
         <div class="container">
-          <a href="/founder/">Meet the founder</a>
+          <a href={url('/founder/')}>Meet the founder</a>
         </div>
       </section>
     )

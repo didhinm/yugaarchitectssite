@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import { url } from '../../lib/url';
 import { contact } from '../../data/site';
 ---
 
@@ -11,7 +12,7 @@ import { contact } from '../../data/site';
       We have your message and will reply soon. If it is urgent, message us on
       <a href={contact.whatsapp.href}>WhatsApp</a>.
     </p>
-    <p><a href="/projects/" class="button button--ghost">Back to projects</a></p>
+    <p><a href={url('/projects/')} class="button button--ghost">Back to projects</a></p>
   </header>
 </BaseLayout>
 

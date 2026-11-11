@@ -8,6 +8,7 @@ import '../styles/utilities.css';
 import Seo from '../components/Seo.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import { url } from '../lib/url';
 
 export interface Props {
   title?: string;
@@ -31,10 +32,10 @@ const { preload, ...seo } = Astro.props;
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#FFFFFF" />
     <Seo {...seo} />
-    <link rel="icon" type="image/png" sizes="32x32" href="/brand/icon-32.png" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/brand/icon-180.png" />
-    <link rel="manifest" href="/site.webmanifest" />
-    <link rel="sitemap" href="/sitemap-index.xml" />
+    <link rel="icon" type="image/png" sizes="32x32" href={url('/brand/icon-32.png')} />
+    <link rel="apple-touch-icon" sizes="180x180" href={url('/brand/icon-180.png')} />
+    <link rel="manifest" href={url('/site.webmanifest')} />
+    <link rel="sitemap" href={url('/sitemap-index.xml')} />
     {
       preload && (
         <link

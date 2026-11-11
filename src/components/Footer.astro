@@ -2,6 +2,7 @@
 import { Image } from 'astro:assets';
 import { site, contact, address, hours, visibleNav } from '../data/site';
 import logoFull from '../assets/brand/logo-full.png';
+import { url } from '../lib/url';
 
 const year = new Date().getFullYear();
 ---
@@ -39,7 +40,7 @@ const year = new Date().getFullYear();
       <nav class="site-footer__col" aria-label="Footer">
         <p class="label">Pages</p>
         <ul role="list">
-          {visibleNav.map((item) => <li><a href={item.href}>{item.label}</a></li>)}
+          {visibleNav.map((item) => <li><a href={url(item.href)}>{item.label}</a></li>)}
         </ul>
       </nav>
     </div>

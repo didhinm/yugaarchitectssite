@@ -2,11 +2,18 @@
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 
+// Where the site is served. Defaults to the custom domain at the root.
+// The deploy workflow overrides these while the site lives at didhinm.github.io/yugaarchitectssite/.
+const SITE_URL = process.env.SITE_URL || 'https://yugaarchitects.in';
+const BASE_PATH = process.env.BASE_PATH || '/';
+const base = BASE_PATH.replace(/\/$/, '');
+
 // Pages that must never appear in the sitemap (drafts, utility pages).
-const EXCLUDED = ['/founder/', '/contact/thanks/', '/404/'];
+const EXCLUDED = ['/founder/', '/contact/thanks/', '/404/'].map((path) => `${base}${path}`);
 
 export default defineConfig({
-  site: 'https://yugaarchitects.in',
+  site: SITE_URL,
+  base: BASE_PATH,
   output: 'static',
   trailingSlash: 'always',
   build: {
@@ -17,7 +24,7 @@ export default defineConfig({
   },
   integrations: [
     sitemap({
-      filter: (page) => !EXCLUDED.some((path) => new URL(page).pathname === path),
+      filter: (page) => !EXCLUDED.includes(new URL(page).pathname),
     }),
   ],
 });

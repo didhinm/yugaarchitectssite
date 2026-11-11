@@ -3,6 +3,7 @@ import type { ImageMetadata } from 'astro';
 import { getImage } from 'astro:assets';
 import { site, contact, address, hours } from '../data/site';
 import logoFull from '../assets/brand/logo-full.png';
+import { absoluteUrl } from '../lib/url';
 
 export interface Props {
   title?: string;
@@ -27,10 +28,11 @@ const {
 
 const fullTitle = title ? `${title} · ${site.name}` : `${site.name} · Architects in Palakkad, Kerala | India & UAE`;
 const canonical = new URL(Astro.url.pathname, Astro.site ?? site.url).href;
+const homeUrl = absoluteUrl('/');
 
 const ogImageUrl = image
   ? new URL((await getImage({ src: image, width: 1200, height: 630, fit: 'cover', format: 'jpg' })).src, Astro.site).href
-  : new URL('/og-default.jpg', Astro.site).href;
+  : absoluteUrl('/og-default.jpg');
 const ogAlt = imageAlt ?? `${site.name}, ${site.subline}`;
 
 const logoUrl = new URL((await getImage({ src: logoFull, width: 600, format: 'png' })).src, Astro.site).href;
@@ -38,13 +40,13 @@ const logoUrl = new URL((await getImage({ src: logoFull, width: 600, format: 'pn
 const organisation = {
   '@context': 'https://schema.org',
   '@type': 'ProfessionalService',
-  '@id': `${site.url}/#studio`,
+  '@id': `${homeUrl}#studio`,
   name: site.name,
   slogan: site.tagline,
   description: site.description,
-  url: `${site.url}/`,
+  url: homeUrl,
   logo: logoUrl,
-  image: new URL('/og-default.jpg', site.url).href,
+  image: absoluteUrl('/og-default.jpg'),
   email: contact.email,
   telephone: [contact.phoneIndia.e164, contact.phoneUae.e164],
   founder: { '@type': 'Person', name: site.founder, jobTitle: 'Architect' },
