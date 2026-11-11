@@ -1,8 +1,10 @@
 name: Deploy to GitHub Pages
 
+# The live site deploys only from the `first-live-build` branch.
+# `main` is for day-to-day work; merge main into first-live-build to publish (see docs/content-guide.md).
 on:
   push:
-    branches: [main]
+    branches: [first-live-build]
   workflow_dispatch:
 
 permissions:

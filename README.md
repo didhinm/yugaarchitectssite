@@ -2,6 +2,7 @@
 
 Static portfolio site for Yuga Architects (Ar. Reshmi Ravindran), Palakkad, Kerala. Built with Astro, deployed to GitHub Pages at https://yugaarchitects.in.
 
+- **Adding projects, hero images and publishing:** [`docs/content-guide.md`](docs/content-guide.md)
 - Design brief and sitemap: [`docs/design-brief.md`](docs/design-brief.md) (source of truth)
 - Working rules for contributors and Claude Code: [`CLAUDE.md`](CLAUDE.md)
 
@@ -11,17 +12,20 @@ Requires Node 22.23+ (CI uses Node 24).
 
 ```bash
 npm install
-npm run dev        # http://localhost:4321
+npm run dev        # http://localhost:4321 (holding page while not launched)
+npm run dev:site   # full site, regardless of the launch switch
 npm run check      # types + content schema
 npm run build      # outputs to dist/
+npm run build:site # full-site build
 npm run preview
 ```
 
 ## Content
 
 - Firm facts, nav, services, process and the form key: `src/data/site.ts`
-- Projects: one folder per project in `src/content/projects/<slug>/` with `index.md` and `images/`. Schema in `src/content.config.ts` (brief §6).
-- The five projects in the repo are **placeholders**: plain stone-coloured images and `[TBC]` text. Replace the images and frontmatter with the real projects before launch.
+- Projects: one folder per project in `src/content/projects/<slug>/` with `index.md` and `images/`. Start from [`templates/project/`](templates/project/). Schema in `src/content.config.ts` (brief §6).
+- Hero slideshow: images in `src/assets/hero/`, descriptions and timing in `src/data/hero.ts`.
+- `project-03` to `project-05` are hidden placeholders (`draft: true`), kept as examples.
 
 ## Holding page
 
@@ -43,7 +47,14 @@ The live site currently shows an "Unearthing soon" holding page on every URL. Ru
 
 ## Deploy
 
-Every push to `main` builds and deploys via `.github/workflows/deploy.yml`.
+The live site deploys **only from the `first-live-build` branch** (`.github/workflows/deploy.yml`; the GitHub Pages environment also allows only that branch). Work on `main`, then publish:
+
+```bash
+git checkout first-live-build
+git merge main
+git push
+git checkout main
+```
 
 One-time setup:
 
