@@ -1,0 +1,27 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Page not found" description="This page could not be found." noindex>
+  <header class="container page-head notfound">
+    <p class="label">404</p>
+    <h1>This page could not be found</h1>
+    <p class="lead">It may have moved. Try the projects or get in touch.</p>
+    <p class="notfound__links">
+      <a href="/" class="button">Home</a>
+      <a href="/projects/" class="button button--ghost">Projects</a>
+    </p>
+  </header>
+</BaseLayout>
+
+<style>
+  .notfound {
+    padding-bottom: var(--section-gap);
+  }
+
+  .notfound__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+</style>

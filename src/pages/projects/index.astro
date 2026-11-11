@@ -1,0 +1,43 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ProjectTile from '../../components/ProjectTile.astro';
+import CTA from '../../components/CTA.astro';
+import { getPublishedProjects } from '../../lib/projects';
+
+const projects = await getPublishedProjects();
+---
+
+<BaseLayout
+  title="Projects"
+  description="Homes, villas, workplaces, interiors and renovations by Yuga Architects across Kerala, India and the UAE."
+  image={projects[0]?.data.cover}
+  imageAlt={projects[0]?.data.coverAlt}
+>
+  <header class="container page-head">
+    <p class="label">Projects</p>
+    <h1>Selected work</h1>
+    <p class="lead">Homes, workplaces and interiors across Kerala, India and the UAE.</p>
+  </header>
+
+  <section class="container" aria-label="All projects">
+    <div class="project-grid">
+      {projects.map((project, i) => <ProjectTile project={project} headingLevel={2} eager={i < 2} />)}
+    </div>
+  </section>
+
+  <CTA />
+</BaseLayout>
+
+<style>
+  .project-grid {
+    display: grid;
+    gap: var(--space-5);
+  }
+
+  @media (min-width: 48rem) {
+    .project-grid {
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-6) var(--gutter);
+    }
+  }
+</style>

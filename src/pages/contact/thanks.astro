@@ -1,0 +1,22 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { contact } from '../../data/site';
+---
+
+<BaseLayout title="Thank you" description="Your enquiry has been sent to Yuga Architects." noindex>
+  <header class="container page-head thanks">
+    <p class="label">Enquiry sent</p>
+    <h1>Thank you</h1>
+    <p class="lead">
+      We have your message and will reply soon. If it is urgent, message us on
+      <a href={contact.whatsapp.href}>WhatsApp</a>.
+    </p>
+    <p><a href="/projects/" class="button button--ghost">Back to projects</a></p>
+  </header>
+</BaseLayout>
+
+<style>
+  .thanks {
+    padding-bottom: var(--section-gap);
+  }
+</style>

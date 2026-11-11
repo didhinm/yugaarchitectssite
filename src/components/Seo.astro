@@ -1,0 +1,104 @@
+---
+import type { ImageMetadata } from 'astro';
+import { getImage } from 'astro:assets';
+import { site, contact, address, hours } from '../data/site';
+import logoFull from '../assets/brand/logo-full.png';
+
+export interface Props {
+  title?: string;
+  description?: string;
+  image?: ImageMetadata;
+  imageAlt?: string;
+  noindex?: boolean;
+  type?: 'website' | 'article';
+  /** Extra JSON-LD objects for this page (e.g. a CreativeWork). */
+  jsonLd?: Record<string, unknown>[];
+}
+
+const {
+  title,
+  description = site.description,
+  image,
+  imageAlt,
+  noindex = false,
+  type = 'website',
+  jsonLd = [],
+} = Astro.props;
+
+const fullTitle = title ? `${title} · ${site.name}` : `${site.name} · Architects in Palakkad, Kerala | India & UAE`;
+const canonical = new URL(Astro.url.pathname, Astro.site ?? site.url).href;
+
+const ogImageUrl = image
+  ? new URL((await getImage({ src: image, width: 1200, height: 630, fit: 'cover', format: 'jpg' })).src, Astro.site).href
+  : new URL('/og-default.jpg', Astro.site).href;
+const ogAlt = imageAlt ?? `${site.name}, ${site.subline}`;
+
+const logoUrl = new URL((await getImage({ src: logoFull, width: 600, format: 'png' })).src, Astro.site).href;
+
+const organisation = {
+  '@context': 'https://schema.org',
+  '@type': 'ProfessionalService',
+  '@id': `${site.url}/#studio`,
+  name: site.name,
+  slogan: site.tagline,
+  description: site.description,
+  url: `${site.url}/`,
+  logo: logoUrl,
+  image: new URL('/og-default.jpg', site.url).href,
+  email: contact.email,
+  telephone: [contact.phoneIndia.e164, contact.phoneUae.e164],
+  founder: { '@type': 'Person', name: site.founder, jobTitle: 'Architect' },
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: address.street,
+    addressLocality: address.locality,
+    addressRegion: address.region,
+    postalCode: address.postalCode,
+    addressCountry: address.countryCode,
+  },
+  geo: {
+    '@type': 'GeoCoordinates',
+    latitude: address.geo.latitude,
+    longitude: address.geo.longitude,
+  },
+  openingHoursSpecification: [
+    {
+      '@type': 'OpeningHoursSpecification',
+      dayOfWeek: hours.days,
+      opens: hours.opens,
+      closes: hours.closes,
+    },
+  ],
+  areaServed: [
+    { '@type': 'Country', name: 'India' },
+    { '@type': 'Country', name: 'United Arab Emirates' },
+  ],
+  sameAs: [contact.instagram.href],
+};
+
+const schemas = [organisation, ...jsonLd];
+---
+
+<title>{fullTitle}</title>
+<meta name="description" content={description} />
+<link rel="canonical" href={canonical} />
+{noindex && <meta name="robots" content="noindex, follow" />}
+
+<meta property="og:type" content={type} />
+<meta property="og:site_name" content={site.name} />
+<meta property="og:locale" content={site.locale} />
+<meta property="og:title" content={fullTitle} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={canonical} />
+<meta property="og:image" content={ogImageUrl} />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content={ogAlt} />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={fullTitle} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={ogImageUrl} />
+<meta name="twitter:image:alt" content={ogAlt} />
+
+{schemas.map((schema) => <script type="application/ld+json" set:html={JSON.stringify(schema)} />)}

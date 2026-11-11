@@ -1,0 +1,119 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import CTA from '../components/CTA.astro';
+import { services, process } from '../data/site';
+---
+
+<BaseLayout
+  title="Services"
+  description="Architectural design, interior design, renovation, landscape design, design consultation and 3D visualisation, from Palakkad to the UAE."
+>
+  <header class="container page-head">
+    <p class="label">Services</p>
+    <h1>From first sketch to finished space</h1>
+    <p class="lead">Six ways we work with clients on homes, workplaces and existing buildings.</p>
+  </header>
+
+  <section class="container" aria-label="Services">
+    <ol role="list" class="service-list">
+      {
+        services.map((service, i) => (
+          <li class="service reveal" id={service.slug}>
+            <span class="label">{String(i + 1).padStart(2, '0')}</span>
+            <h2 class="h3 service__title">{service.title}</h2>
+            <p class="service__text">{service.description}</p>
+          </li>
+        ))
+      }
+    </ol>
+  </section>
+
+  <section class="section section--stone process" aria-labelledby="process-heading">
+    <div class="container grid">
+      <div class="process__head">
+        <p class="label">Process</p>
+        <h2 id="process-heading">How a project runs</h2>
+      </div>
+      <ol role="list" class="process__steps">
+        {
+          process.map((step, i) => (
+            <li class="step reveal">
+              <span class="label">{String(i + 1).padStart(2, '0')}</span>
+              <h3>{step.title}</h3>
+              <p class="muted">{step.description}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <CTA />
+</BaseLayout>
+
+<style>
+  .service-list {
+    border-top: 1px solid var(--rule);
+  }
+
+  .service {
+    display: grid;
+    gap: var(--space-1);
+    padding-block: var(--space-4);
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .service__title {
+    font-size: var(--size-h2);
+    font-weight: 300;
+    line-height: 1.2;
+  }
+
+  .service__text {
+    max-width: var(--measure);
+  }
+
+  @media (min-width: 64rem) {
+    .service {
+      grid-template-columns: 4rem 5fr 6fr;
+      gap: var(--gutter);
+      align-items: baseline;
+    }
+  }
+
+  .process {
+    margin-top: var(--section-gap);
+  }
+
+  .process__head,
+  .process__steps {
+    grid-column: 1 / -1;
+  }
+
+  .process__head > * + * {
+    margin-top: var(--space-2);
+  }
+
+  .process__steps {
+    margin-top: var(--space-5);
+    display: grid;
+    gap: var(--space-4);
+  }
+
+  .step > * + * {
+    margin-top: var(--space-1);
+  }
+
+  @media (min-width: 48rem) {
+    .process__steps {
+      grid-template-columns: repeat(2, 1fr);
+      column-gap: var(--gutter);
+    }
+  }
+
+  @media (min-width: 80rem) {
+    .process__steps {
+      grid-template-columns: repeat(5, 1fr);
+    }
+  }
+</style>

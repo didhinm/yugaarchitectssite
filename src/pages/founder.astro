@@ -1,0 +1,78 @@
+---
+// DRAFT (brief §5.5): built with placeholders; excluded from nav (site.ts) and sitemap (astro.config.mjs), and noindexed.
+// When the bio arrives: fill in the content, set `founderPublished = true` and remove `draft: true` from the Founder nav item in src/data/site.ts,
+// then drop '/founder/' from EXCLUDED in astro.config.mjs and remove `noindex` below.
+import BaseLayout from '../layouts/BaseLayout.astro';
+import CTA from '../components/CTA.astro';
+import { site } from '../data/site';
+---
+
+<BaseLayout title={site.founder} description={`${site.founder}, founder of ${site.name}.`} noindex>
+  <div class="container grid founder">
+    <div class="founder__portrait" role="img" aria-label="[TBC: Portrait of Ar. Reshmi Ravindran]"></div>
+
+    <div class="founder__text">
+      <header class="founder__head">
+        <p class="label">Founder</p>
+        <h1>{site.founder}</h1>
+      </header>
+
+      <div class="prose">
+        <p class="lead">[TBC: Short introduction: who she is and why she founded Yuga.]</p>
+
+        <h2>Background</h2>
+        <p>[TBC: Education and experience.]</p>
+
+        <h2>Philosophy</h2>
+        <p>[TBC: Design philosophy in her own words.]</p>
+
+        <h2>Recognition & memberships</h2>
+        <p>[TBC: Awards, publications, Council of Architecture registration, professional memberships.]</p>
+      </div>
+    </div>
+  </div>
+
+  <CTA />
+</BaseLayout>
+
+<style>
+  .founder {
+    padding-block: var(--space-5) 0;
+    row-gap: var(--space-5);
+  }
+
+  .founder__portrait {
+    grid-column: 1 / -1;
+    aspect-ratio: 4 / 5;
+    background: var(--stone);
+  }
+
+  .founder__text {
+    grid-column: 1 / -1;
+  }
+
+  .founder__head {
+    margin-bottom: var(--space-5);
+  }
+
+  .founder__head > * + * {
+    margin-top: var(--space-3);
+  }
+
+  @media (min-width: 64rem) {
+    .founder {
+      padding-top: var(--space-6);
+    }
+
+    .founder__portrait {
+      grid-column: 1 / span 5;
+      align-self: start;
+      position: sticky;
+      top: calc(var(--header-height-compact) + var(--space-4));
+    }
+
+    .founder__text {
+      grid-column: 7 / span 6;
+    }
+  }
+</style>

@@ -1,0 +1,103 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ContactForm from '../../components/ContactForm.astro';
+import { contact, address, hours } from '../../data/site';
+---
+
+<BaseLayout
+  title="Contact"
+  description="Start a conversation with Yuga Architects about your home, workplace or renovation in Kerala, India or the UAE. Email, WhatsApp or call."
+>
+  <header class="container page-head">
+    <p class="label">Contact</p>
+    <h1>Start a conversation</h1>
+    <p class="lead">
+      Tell us a little about your project and we will get back to you. {contact.visits}
+    </p>
+  </header>
+
+  <div class="container grid contact">
+    <section class="contact__form" aria-labelledby="form-heading">
+      <h2 id="form-heading" class="label contact__heading">Enquiry</h2>
+      <ContactForm />
+    </section>
+
+    <aside class="contact__direct" aria-label="Direct contact">
+      <div class="block">
+        <h2 class="label contact__heading">Direct</h2>
+        <dl class="direct">
+          <div><dt class="label">Email</dt><dd><a href={`mailto:${contact.email}`}>{contact.email}</a></dd></div>
+          <div><dt class="label">WhatsApp</dt><dd><a href={contact.whatsapp.href}>{contact.whatsapp.display}</a></dd></div>
+          <div><dt class="label">Call India</dt><dd><a href={contact.phoneIndia.href}>{contact.phoneIndia.display}</a></dd></div>
+          <div><dt class="label">Call UAE</dt><dd><a href={contact.phoneUae.href}>{contact.phoneUae.display}</a></dd></div>
+          <div><dt class="label">Instagram</dt><dd><a href={contact.instagram.href}>{contact.instagram.handle}</a></dd></div>
+        </dl>
+      </div>
+
+      <div class="block">
+        <h2 class="label contact__heading">Studio</h2>
+        <address>
+          {address.street}<br />
+          {address.locality}, {address.region} {address.postalCode}<br />
+          {address.country}
+        </address>
+        <p><a href={address.mapsHref}>Get directions</a></p>
+      </div>
+
+      <div class="block">
+        <h2 class="label contact__heading">Hours</h2>
+        <p>{hours.display}</p>
+        <p class="muted">{contact.visits}</p>
+      </div>
+    </aside>
+  </div>
+</BaseLayout>
+
+<style>
+  .contact {
+    row-gap: var(--space-6);
+    padding-bottom: var(--section-gap);
+  }
+
+  .contact__form,
+  .contact__direct {
+    grid-column: 1 / -1;
+  }
+
+  .contact__heading {
+    color: var(--ink);
+    padding-bottom: var(--space-2);
+    margin-bottom: var(--space-3);
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .block + .block {
+    margin-top: var(--space-5);
+  }
+
+  .block > p {
+    margin-top: var(--space-1);
+  }
+
+  address {
+    font-style: normal;
+  }
+
+  .direct > div + div {
+    margin-top: var(--space-2);
+  }
+
+  .direct dd {
+    margin: 0;
+  }
+
+  @media (min-width: 64rem) {
+    .contact__form {
+      grid-column: 1 / span 7;
+    }
+
+    .contact__direct {
+      grid-column: 9 / span 4;
+    }
+  }
+</style>

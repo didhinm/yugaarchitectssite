@@ -1,0 +1,168 @@
+---
+import type { GetStaticPaths } from 'astro';
+import { render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Hero from '../../components/Hero.astro';
+import ProjectFacts from '../../components/ProjectFacts.astro';
+import Gallery from '../../components/Gallery.astro';
+import CTA from '../../components/CTA.astro';
+import { getPublishedProjects, projectHref, countryNames, type Project } from '../../lib/projects';
+import { heroPreload } from '../../lib/hero';
+import { site } from '../../data/site';
+
+export const getStaticPaths = (async () => {
+  const projects = await getPublishedProjects();
+  return projects.map((project, i) => ({
+    params: { slug: project.data.slug },
+    props: { project, next: projects[(i + 1) % projects.length] },
+  }));
+}) satisfies GetStaticPaths;
+
+interface Props {
+  project: Project;
+  next: Project;
+}
+
+const { project, next } = Astro.props;
+const { data } = project;
+const { Content } = await render(project);
+const preload = await heroPreload(data.cover);
+const url = new URL(projectHref(project), Astro.site).href;
+
+const creativeWork = {
+  '@context': 'https://schema.org',
+  '@type': 'CreativeWork',
+  name: data.title,
+  description: data.lead,
+  url,
+  genre: data.typeLabel,
+  ...(data.year ? { dateCreated: String(data.year) } : {}),
+  locationCreated: {
+    '@type': 'Place',
+    name: data.location,
+    address: { '@type': 'PostalAddress', addressCountry: data.country },
+  },
+  creator: { '@id': `${site.url}/#studio` },
+  ...(data.photographer ? { contributor: { '@type': 'Person', name: data.photographer, roleName: 'Photographer' } } : {}),
+};
+---
+
+<BaseLayout
+  title={data.title}
+  description={data.lead}
+  image={data.cover}
+  imageAlt={data.coverAlt}
+  type="article"
+  jsonLd={[creativeWork]}
+  preload={preload}
+>
+  <article>
+    <Hero src={data.cover} alt={data.coverAlt} focus={data.coverFocus} />
+
+    <div class="container grid project-head">
+      <header class="project-head__title">
+        <p class="label">{data.typeLabel}</p>
+        <h1>{data.title}</h1>
+        <p class="muted">{data.location}, {countryNames[data.country]}</p>
+      </header>
+      <div class="project-head__facts">
+        <ProjectFacts project={project} />
+      </div>
+    </div>
+
+    <div class="container grid project-body">
+      <div class="project-body__text">
+        <p class="lead">{data.lead}</p>
+        <div class="prose">
+          <Content />
+        </div>
+      </div>
+    </div>
+
+    {data.gallery.length > 0 && <Gallery items={data.gallery} />}
+  </article>
+
+  {
+    next.id !== project.id && (
+      <nav class="container next" aria-label="Next project">
+        <a href={projectHref(next)} class="next__link plain">
+          <span class="label">Next project</span>
+          <span class="next__title">{next.data.title}</span>
+        </a>
+      </nav>
+    )
+  }
+
+  <CTA />
+</BaseLayout>
+
+<style>
+  .project-head {
+    padding-top: var(--space-5);
+    row-gap: var(--space-5);
+  }
+
+  .project-head__title,
+  .project-head__facts,
+  .project-body__text {
+    grid-column: 1 / -1;
+  }
+
+  .project-head__title > * + * {
+    margin-top: var(--space-2);
+  }
+
+  .project-body {
+    padding-block: var(--space-5) var(--section-gap);
+  }
+
+  .project-body__text > * + * {
+    margin-top: var(--space-4);
+  }
+
+  .project-body .lead {
+    max-width: var(--measure);
+  }
+
+  @media (min-width: 64rem) {
+    .project-head {
+      padding-top: var(--space-6);
+    }
+
+    .project-head__title {
+      grid-column: 1 / span 7;
+    }
+
+    .project-head__facts {
+      grid-column: 9 / span 4;
+    }
+
+    .project-body__text {
+      grid-column: 3 / span 8;
+    }
+  }
+
+  .next {
+    padding-top: var(--section-gap);
+  }
+
+  .next__link {
+    display: grid;
+    gap: var(--space-1);
+    padding-top: var(--space-3);
+    border-top: 1px solid var(--rule);
+  }
+
+  .next__title {
+    font-family: var(--font-heading);
+    font-weight: 300;
+    font-size: var(--size-h2);
+    line-height: 1.2;
+  }
+
+  .next__link:hover .next__title {
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.15em;
+  }
+</style>

@@ -1,0 +1,95 @@
+---
+import { Picture } from 'astro:assets';
+import { type Project, projectHref } from '../lib/projects';
+
+export interface Props {
+  project: Project;
+  /** `full` spans the whole content width; `half` sits in a 2-up row or grid. */
+  size?: 'full' | 'half';
+  /** Heading level for the project name. */
+  headingLevel?: 2 | 3;
+  eager?: boolean;
+}
+
+const { project, size = 'half', headingLevel = 3, eager = false } = Astro.props;
+const { data } = project;
+const Heading = `h${headingLevel}` as 'h2' | 'h3';
+
+const sizes =
+  size === 'full'
+    ? '(min-width: 90rem) 1312px, calc(100vw - 2 * clamp(1.25rem, 0.81rem + 1.88vw, 4rem))'
+    : '(min-width: 90rem) 644px, (min-width: 48rem) calc(50vw - 3rem), calc(100vw - 2.5rem)';
+---
+
+<article class:list={['tile', `tile--${size}`, 'reveal']}>
+  <a href={projectHref(project)} class="tile__link plain">
+    <div class="tile__media">
+      <Picture
+        src={data.cover}
+        alt={data.coverAlt}
+        formats={['avif', 'webp']}
+        widths={size === 'full' ? [640, 960, 1280, 1920, 2400] : [480, 720, 960, 1280]}
+        sizes={sizes}
+        loading={eager ? 'eager' : 'lazy'}
+        decoding="async"
+        style={`object-position: ${data.coverFocus}`}
+      />
+    </div>
+    <div class="tile__meta">
+      <p class="label">{data.typeLabel}</p>
+      <Heading class="tile__title h3">{data.title}</Heading>
+      <p class="tile__place muted">{data.location}{data.year && <> · {data.year}</>}</p>
+    </div>
+  </a>
+</article>
+
+<style>
+  .tile__link {
+    display: block;
+    color: inherit;
+  }
+
+  .tile__media {
+    background: var(--stone);
+    overflow: hidden;
+  }
+
+  .tile__media :global(img) {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    transition: opacity var(--duration) var(--ease-out);
+  }
+
+  @media (min-width: 48rem) {
+    .tile--full .tile__media :global(img) {
+      aspect-ratio: 16 / 9;
+    }
+  }
+
+  .tile__link:hover .tile__media :global(img) {
+    opacity: 0.92;
+  }
+
+  .tile__meta {
+    padding-top: var(--space-2);
+  }
+
+  .tile__meta > * + * {
+    margin-top: 0.25rem;
+  }
+
+  .tile__title {
+    font-family: var(--font-heading);
+  }
+
+  .tile__link:hover .tile__title {
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.2em;
+  }
+
+  .tile__place {
+    font-size: var(--size-small);
+  }
+</style>

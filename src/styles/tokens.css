@@ -1,0 +1,63 @@
+/* Design tokens: see docs/design-brief.md §3. Do not add colours, fonts or weights here without updating the brief. */
+
+:root {
+  /* Palette §3.1 */
+  --paper: #ffffff;
+  --stone: #f4f2ee;
+  --ink: #141414;
+  --muted: #6e6b66;
+  --rule: #e4e1db;
+
+  /* Type §3.2 */
+  --font-heading: 'Jost Variable', 'Jost', system-ui, sans-serif;
+  --font-body: 'Instrument Sans Variable', 'Instrument Sans', system-ui, sans-serif;
+
+  /* Fluid sizes, 375 px → 1440 px viewport */
+  --size-h1: clamp(2.5rem, 1.709rem + 3.38vw, 4.75rem); /* 40 → 76 */
+  --size-h2: clamp(1.75rem, 1.398rem + 1.5vw, 2.75rem); /* 28 → 44 */
+  --size-h3: clamp(1.125rem, 1.081rem + 0.188vw, 1.25rem); /* 18 → 20 */
+  --size-body: clamp(1.0625rem, 1.04rem + 0.094vw, 1.125rem); /* 17 → 18 */
+  --size-label: clamp(0.75rem, 0.728rem + 0.094vw, 0.8125rem); /* 12 → 13 */
+  --size-small: 0.9375rem;
+
+  --leading-tight: 1.05;
+  --leading-heading: 1.2;
+  --leading-body: 1.6;
+  --tracking-label: 0.14em;
+  --tracking-h1: -0.01em;
+
+  /* Spacing §3.3 */
+  --space-1: 0.5rem; /* 8 */
+  --space-2: 1rem; /* 16 */
+  --space-3: 1.5rem; /* 24 */
+  --space-4: 2.5rem; /* 40 */
+  --space-5: 4rem; /* 64 */
+  --space-6: 6rem; /* 96 */
+  --space-7: 10rem; /* 160 */
+
+  /* Section rhythm: 64 → 160 */
+  --section-gap: clamp(var(--space-5), 2.6rem + 7vw, var(--space-7));
+
+  /* Grid */
+  --gutter: 1.5rem;
+  --margin: clamp(1.25rem, 0.81rem + 1.88vw, 4rem); /* 20 → 64 */
+  --max-width: 90rem; /* 1440 */
+  --measure: 42.5rem; /* 680 */
+
+  /* Header */
+  --header-height: 4.5rem;
+  --header-height-compact: 3.5rem;
+  --mark-height: 2.25rem; /* 36 */
+
+  /* Motion §3 principle 5 */
+  --ease-out: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --duration: 280ms;
+}
+
+@media (min-width: 64rem) {
+  :root {
+    --header-height: 5.5rem;
+    --header-height-compact: 4rem;
+    --mark-height: 2.75rem; /* 44 */
+  }
+}

@@ -1,0 +1,117 @@
+---
+import { Image } from 'astro:assets';
+import { site, contact, address, hours, visibleNav } from '../data/site';
+import logoFull from '../assets/brand/logo-full.png';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="grid site-footer__grid">
+      <div class="site-footer__brand">
+        <Image src={logoFull} alt={`${site.name}, ${site.subline}. India | UAE`} width={520} class="site-footer__logo" />
+        <p class="site-footer__tagline">{site.tagline}</p>
+      </div>
+
+      <div class="site-footer__col">
+        <p class="label">Studio</p>
+        <address>
+          {address.street}<br />
+          {address.locality}, {address.region} {address.postalCode}<br />
+          {address.country}
+        </address>
+        <p><a href={address.mapsHref}>Get directions</a></p>
+        <p class="muted">{hours.display}<br />{contact.visits}</p>
+      </div>
+
+      <div class="site-footer__col">
+        <p class="label">Contact</p>
+        <ul role="list">
+          <li><a href={`mailto:${contact.email}`}>{contact.email}</a></li>
+          <li><a href={contact.whatsapp.href}>WhatsApp {contact.whatsapp.display}</a></li>
+          <li><a href={contact.phoneIndia.href}>India {contact.phoneIndia.display}</a></li>
+          <li><a href={contact.phoneUae.href}>UAE {contact.phoneUae.display}</a></li>
+          <li><a href={contact.instagram.href}>Instagram {contact.instagram.handle}</a></li>
+        </ul>
+      </div>
+
+      <nav class="site-footer__col" aria-label="Footer">
+        <p class="label">Pages</p>
+        <ul role="list">
+          {visibleNav.map((item) => <li><a href={item.href}>{item.label}</a></li>)}
+        </ul>
+      </nav>
+    </div>
+
+    <p class="site-footer__legal label">© {year} {site.name}</p>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    padding-block: var(--space-6) var(--space-4);
+    border-top: 1px solid var(--rule);
+    font-size: var(--size-small);
+  }
+
+  .site-footer__grid {
+    row-gap: var(--space-5);
+  }
+
+  .site-footer__brand {
+    grid-column: 1 / -1;
+  }
+
+  .site-footer__logo {
+    width: min(100%, 16.25rem);
+    height: auto;
+  }
+
+  .site-footer__tagline {
+    margin-top: var(--space-3);
+    font-family: var(--font-heading);
+    font-weight: 300;
+    font-size: var(--size-h3);
+  }
+
+  .site-footer__col {
+    grid-column: 1 / -1;
+  }
+
+  .site-footer__col > * + * {
+    margin-top: var(--space-2);
+  }
+
+  .site-footer__col ul li + li {
+    margin-top: var(--space-1);
+  }
+
+  address {
+    font-style: normal;
+  }
+
+  .site-footer__legal {
+    margin-top: var(--space-6);
+  }
+
+  @media (min-width: 48rem) {
+    .site-footer__col {
+      grid-column: span 2;
+    }
+  }
+
+  @media (min-width: 64rem) {
+    .site-footer__brand {
+      grid-column: 1 / span 4;
+    }
+
+    .site-footer__col {
+      grid-column: span 3;
+    }
+
+    nav.site-footer__col {
+      grid-column: 11 / span 2;
+    }
+  }
+</style>

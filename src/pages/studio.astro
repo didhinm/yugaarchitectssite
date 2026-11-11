@@ -1,0 +1,127 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import CTA from '../components/CTA.astro';
+import { site, address, contact, process } from '../data/site';
+
+// [TBC] Approach principles: to be written with the client.
+const principles = [
+  { title: '[TBC: Principle one]', text: '[TBC: One or two sentences.]' },
+  { title: '[TBC: Principle two]', text: '[TBC: One or two sentences.]' },
+  { title: '[TBC: Principle three]', text: '[TBC: One or two sentences.]' },
+];
+---
+
+<BaseLayout
+  title="Studio"
+  description={`${site.name} is an architecture and interiors studio in ${address.locality}, ${address.region}, working on projects across India and the UAE.`}
+>
+  <header class="container page-head">
+    <p class="label">Studio</p>
+    <h1>{site.tagline}</h1>
+    <p class="lead">
+      [TBC: Opening statement on what “Yuga” means to the studio and the idea behind the tagline.]
+    </p>
+  </header>
+
+  <section class="section section--stone" aria-labelledby="approach-heading">
+    <div class="container grid">
+      <h2 id="approach-heading" class="studio__aside label">Approach</h2>
+      <ol role="list" class="principles">
+        {
+          principles.map((p, i) => (
+            <li class="principle reveal">
+              <span class="label">{String(i + 1).padStart(2, '0')}</span>
+              <h3>{p.title}</h3>
+              <p>{p.text}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="where-heading">
+    <div class="container grid">
+      <h2 id="where-heading" class="studio__aside label">Where we work</h2>
+      <div class="studio__main prose reveal">
+        <p class="lead">
+          The studio is based in {address.locality}, {address.region}, and takes on projects across India and the
+          UAE.
+        </p>
+        <p>
+          {contact.visits} <a href="/contact/">Get in touch</a> to arrange a meeting at the studio or a call.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="process-heading">
+    <div class="container grid">
+      <h2 id="process-heading" class="studio__aside label">Process</h2>
+      <div class="studio__main reveal">
+        <ol role="list" class="process-inline">
+          {process.map((step) => <li>{step.title}</li>)}
+        </ol>
+        <p class="process-more"><a href="/services/">Services and process</a></p>
+      </div>
+    </div>
+  </section>
+
+  <CTA />
+</BaseLayout>
+
+<style>
+  .studio__aside {
+    grid-column: 1 / -1;
+    color: var(--ink);
+    margin-bottom: var(--space-3);
+  }
+
+  .studio__main,
+  .principles {
+    grid-column: 1 / -1;
+  }
+
+  .principles {
+    display: grid;
+    gap: var(--space-5);
+  }
+
+  .principle > * + * {
+    margin-top: var(--space-1);
+  }
+
+  .principle h3 {
+    margin-top: var(--space-2);
+  }
+
+  .process-inline {
+    font-family: var(--font-heading);
+    font-weight: 300;
+    font-size: var(--size-h2);
+    line-height: 1.3;
+  }
+
+  .process-more {
+    margin-top: var(--space-4);
+  }
+
+  @media (min-width: 48rem) {
+    .principles {
+      grid-template-columns: 1fr 1fr;
+      column-gap: var(--gutter);
+    }
+  }
+
+  @media (min-width: 64rem) {
+    .studio__aside {
+      grid-column: 1 / span 3;
+      margin-bottom: 0;
+    }
+
+    .studio__main,
+    .principles {
+      grid-column: 5 / span 8;
+    }
+  }
+</style>

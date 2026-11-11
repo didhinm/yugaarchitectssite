@@ -1,0 +1,110 @@
+---
+import type { ImageMetadata } from 'astro';
+import { Picture, getImage } from 'astro:assets';
+import { galleryRows } from '../lib/projects';
+import Lightbox from './Lightbox.astro';
+
+export interface Props {
+  items: { src: ImageMetadata; alt: string; layout: 'full' | 'inset' | 'pair' }[];
+}
+
+const { items } = Astro.props;
+
+// Large version for the lightbox; the link also works without JS.
+const withFull = await Promise.all(
+  items.map(async (item) => ({
+    ...item,
+    full: (await getImage({ src: item.src, width: Math.min(item.src.width, 2400), format: 'webp' })).src,
+  })),
+);
+
+const rows = galleryRows(withFull);
+
+const sizesFor = {
+  full: '100vw',
+  inset: '(min-width: 90rem) 1088px, (min-width: 64rem) 84vw, calc(100vw - 2.5rem)',
+  pair: '(min-width: 90rem) 644px, (min-width: 48rem) calc(50vw - 3rem), calc(100vw - 2.5rem)',
+} as const;
+
+const widthsFor = {
+  full: [640, 960, 1280, 1920, 2400],
+  inset: [640, 960, 1280, 1920],
+  pair: [480, 720, 960, 1280],
+} as const;
+
+let index = -1;
+---
+
+<section class="gallery" aria-label="Gallery">
+  {
+    rows.map((row) => (
+      <div class:list={['gallery__row', `gallery__row--${row.layout}`, row.layout !== 'full' && 'container', 'reveal']}>
+        {row.items.map((item) => {
+          index += 1;
+          return (
+            <a href={item.full} class="gallery__item plain" data-lightbox-item data-index={index}>
+              <Picture
+                src={item.src}
+                alt={item.alt}
+                formats={['avif', 'webp']}
+                widths={[...widthsFor[item.layout]]}
+                sizes={sizesFor[row.items.length === 1 && item.layout === 'pair' ? 'inset' : item.layout]}
+                loading="lazy"
+                decoding="async"
+              />
+            </a>
+          );
+        })}
+      </div>
+    ))
+  }
+</section>
+
+<Lightbox />
+
+<style>
+  .gallery {
+    display: grid;
+    gap: var(--space-3);
+  }
+
+  @media (min-width: 48rem) {
+    .gallery {
+      gap: var(--space-4);
+    }
+  }
+
+  .gallery__item {
+    display: block;
+    background: var(--stone);
+    cursor: zoom-in;
+  }
+
+  .gallery__item :global(img) {
+    width: 100%;
+    height: auto;
+  }
+
+  .gallery__row--inset .gallery__item {
+    max-width: 68rem;
+    margin-inline: auto;
+  }
+
+  .gallery__row--pair {
+    display: grid;
+    gap: var(--space-3);
+  }
+
+  @media (min-width: 48rem) {
+    .gallery__row--pair {
+      grid-template-columns: 1fr 1fr;
+      gap: var(--gutter);
+      align-items: start;
+    }
+
+    .gallery__row--pair:has(> :only-child) {
+      grid-template-columns: 1fr;
+      max-width: 68rem;
+    }
+  }
+</style>
