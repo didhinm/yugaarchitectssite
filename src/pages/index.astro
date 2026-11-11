@@ -6,7 +6,9 @@ import ProjectTile from '../components/ProjectTile.astro';
 import CTA from '../components/CTA.astro';
 import { getPublishedProjects, type Project } from '../lib/projects';
 import { heroPreload } from '../lib/hero';
+import { Picture } from 'astro:assets';
 import { site, services, founderPublished } from '../data/site';
+import { founder, founderPortrait } from '../data/founder';
 import { getHeroImages, toSlides, heroSettings, type HeroImage } from '../data/hero';
 
 const projects = await getPublishedProjects();
@@ -93,9 +95,33 @@ for (let i = 0; i < projects.length; ) {
 
   {
     founderPublished && (
-      <section class="section founder-teaser" aria-label="Founder">
-        <div class="container">
-          <a href={url('/founder/')}>Meet the founder</a>
+      <section class="section founder-teaser" aria-labelledby="founder-heading">
+        <div class="container grid">
+          <h2 id="founder-heading" class="label founder-teaser__label">
+            Founder
+          </h2>
+          {founderPortrait && (
+            <div class="founder-teaser__portrait reveal">
+              <Picture
+                src={founderPortrait}
+                alt={`Portrait of ${founder.name}`}
+                formats={['avif', 'webp']}
+                widths={[320, 480, 640]}
+                sizes="(min-width: 64rem) 20vw, 50vw"
+                loading="lazy"
+              />
+            </div>
+          )}
+          <div class="founder-teaser__text reveal">
+            <p class="founder-teaser__name">{founder.name}</p>
+            <p class="muted">{founder.role}</p>
+            <p class="founder-teaser__summary">{founder.summary}</p>
+            <p>
+              <a href={url('/founder/')} class="label">
+                About the founder
+              </a>
+            </p>
+          </div>
         </div>
       </section>
     )
@@ -203,6 +229,68 @@ for (let i = 0; i < projects.length; ) {
 
     .services__more {
       grid-column: 5 / span 8;
+    }
+  }
+
+  .founder-teaser__label {
+    grid-column: 1 / -1;
+    color: var(--ink);
+    margin-bottom: var(--space-3);
+  }
+
+  .founder-teaser__portrait {
+    grid-column: 1 / span 2;
+    margin-bottom: var(--space-3);
+    background: var(--stone);
+  }
+
+  .founder-teaser__portrait :global(img) {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+  }
+
+  .founder-teaser__text {
+    grid-column: 1 / -1;
+  }
+
+  .founder-teaser__text > * + * {
+    margin-top: var(--space-1);
+  }
+
+  .founder-teaser__name {
+    font-family: var(--font-heading);
+    font-weight: 300;
+    font-size: var(--size-h2);
+    line-height: 1.2;
+  }
+
+  .founder-teaser__summary {
+    max-width: var(--measure);
+    margin-top: var(--space-3) !important;
+  }
+
+  .founder-teaser__text > p:last-child {
+    margin-top: var(--space-4);
+  }
+
+  @media (min-width: 64rem) {
+    .founder-teaser__label {
+      grid-column: 1 / span 3;
+      margin-bottom: 0;
+    }
+
+    .founder-teaser__portrait {
+      grid-column: 5 / span 2;
+      margin-bottom: 0;
+    }
+
+    .founder-teaser__text {
+      grid-column: 5 / span 8;
+    }
+
+    .founder-teaser__portrait + .founder-teaser__text {
+      grid-column: 7 / span 6;
     }
   }
 </style>

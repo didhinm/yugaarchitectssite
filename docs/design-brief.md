@@ -12,7 +12,7 @@ Items marked **[TBC]** are waiting on the client.
 | Firm name | **Yuga Architects** |
 | Wordmark lockup | "Yuga Architects" with "Ar. Reshmi Ravindran" beneath, in a smaller size |
 | Tagline | *Unearthing your dreams* |
-| Founder | Ar. Reshmi Ravindran. Bio, philosophy and portrait **[TBC]** |
+| Founder | Ar. Reshmi Ravindran, Founder & Principal Architect. Bio received 11 Nov 2026; portrait **[TBC]** |
 | Studio | Palakkad, Kerala, India |
 | Practice area | Projects across India and the UAE |
 | Language | English only |
@@ -115,7 +115,7 @@ Files are in `public/brand/` (transparent PNGs cropped from the master; replace 
 /projects/                Projects (grid)
 /projects/<slug>/         Project detail (×5 at launch)
 /studio/                  About the Firm
-/founder/                 About the Founder   [content TBC]
+/founder/                 About the Founder
 /services/                Services
 /contact/                 Contact (form)
 /contact/thanks/          Form success page
@@ -136,7 +136,7 @@ Files are in `public/brand/` (transparent PNGs cropped from the master; replace 
 2. **Intro line:** one or two sentences on who Yuga is and where they work, linking to Studio.
 3. **Selected work:** all launch projects as large tiles (alternating full-width and 2-up). Each tile shows the image, project name, type label and location.
 4. **Services strip:** the six services as a simple text list, linking to Services.
-5. **Founder teaser:** portrait plus one line, linking to Founder. Hidden until the content arrives.
+5. **Founder teaser:** name, role and one line from the bio, linking to Founder. Shows the portrait once it is added to `src/assets/founder/`.
 6. **Enquiry CTA:** "Planning a home, workplace or renovation?" with buttons for Start a conversation (/contact) and WhatsApp.
 
 ### 5.2 Projects `/projects/`
@@ -159,13 +159,13 @@ Files are in `public/brand/` (transparent PNGs cropped from the master; replace 
 - Process summary, linking to Services.
 - Studio photo if available.
 
-### 5.5 Founder `/founder/` **[content TBC]**
+### 5.5 Founder `/founder/` (bio received 11 Nov 2026; text in `src/pages/founder.astro` and `src/data/founder.ts`)
 - Portrait (one strong image, muted or B&W).
 - Ar. Reshmi Ravindran: bio, education, experience, why she founded Yuga, design philosophy, recognition and memberships.
-- Until the content arrives, the page is built with placeholders and **excluded from the nav and sitemap** (`draft: true`).
+- Published in the nav and sitemap. Without a portrait the page shows the bio with a credentials panel; adding an image to `src/assets/founder/` switches it to the portrait layout.
 
 ### 5.6 Services `/services/`
-Six services, each with a two- or three-sentence description:
+Six services, each with a two- or three-sentence description (drafted 11 Nov 2026; text lives in `src/data/site.ts`):
 1. Architectural design
 2. Interior design
 3. Renovation & adaptive reuse
@@ -173,9 +173,9 @@ Six services, each with a two- or three-sentence description:
 5. Design consultation
 6. 3D visualisation
 
-**Process** (draft, client to confirm):
-Consultation → Concept → Design development → Drawings & approvals → Through construction
-*(Last step to confirm: does the studio do periodic site visits or design support during construction, or does its scope end at drawings? It does not offer full project management.)*
+**Process** (confirmed 11 Nov 2026):
+Consultation → Concept → Design development → Drawings → Through construction
+*(Step 4 was "Drawings & approvals"; approvals removed at the client's request. Step 5 is design supervision during construction. The studio does not offer full project management.)*
 
 Not offered (for internal reference; don't list publicly): turnkey / design-and-build, project management, master planning.
 
@@ -255,13 +255,14 @@ The body holds the write-up sections (`## The brief`, etc.).
 | Favicon | Made from the monogram (`icon-32/180/512.png`) |
 | Project photos (×5) | Ready. Need originals at full resolution, ≥2400 px on the long edge |
 | Project write-ups | To be drafted via interview (next step) |
-| Founder bio, philosophy, portrait | **[TBC]**, parked |
+| Founder bio | Received 11 Nov 2026 |
+| Founder portrait | **[TBC]**: drop into `src/assets/founder/` |
 | Studio photo | Optional |
 | Social preview image | Generated from the logo plus a hero photo |
 
 ## 9. Open decisions
 
 1. ~~Typeface pairing~~ Resolved: Jost (light) + Instrument Sans, to match the logo.
-2. Final step of the process (site support vs. ends at drawings).
+2. ~~Final step of the process~~ Resolved: design supervision through construction.
 3. ~~Which project is the home-page hero~~ Resolved: a hero slideshow from images in `src/assets/hero/`.
 4. Analytics: yes / no.

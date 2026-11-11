@@ -60,15 +60,14 @@ export type NavItem = { label: string; href: string; draft?: boolean };
 export const nav: NavItem[] = [
   { label: 'Projects', href: '/projects/' },
   { label: 'Studio', href: '/studio/' },
-  // Hidden until the founder bio arrives (brief §5.5).
-  { label: 'Founder', href: '/founder/', draft: true },
+  { label: 'Founder', href: '/founder/' },
   { label: 'Services', href: '/services/' },
   { label: 'Contact', href: '/contact/' },
 ];
 
 export const visibleNav = nav.filter((item) => !item.draft);
 
-export const founderPublished = false;
+export const founderPublished = true;
 
 export const form = {
   endpoint: 'https://api.web3forms.com/submit',
@@ -102,48 +101,56 @@ export const services = [
     slug: 'architecture',
     title: 'Architectural design',
     description:
-      '[TBC: Two or three sentences on architectural design: new homes, villas and workplaces, from first sketch to construction drawings.]',
+      'Homes, villas and workplaces designed from the first site visit to a complete set of drawings. Every design begins with how you live and work, and responds to the site, the climate and the way light and air move through it.',
   },
   {
     slug: 'interiors',
     title: 'Interior design',
     description:
-      '[TBC: Two or three sentences on interior design: layouts, joinery, materials, lighting and furnishing.]',
+      'Interiors conceived together with the architecture, so layouts, joinery, materials and lighting feel part of one idea. The result is a space that is functional, comfortable and beautiful to live in, with every detail considered.',
   },
   {
     slug: 'renovation',
     title: 'Renovation & adaptive reuse',
     description:
-      '[TBC: Two or three sentences on renovating and reworking existing buildings.]',
+      'New life for existing homes and buildings, from reworking layouts to opening rooms up to daylight and natural ventilation. We look carefully at what is worth keeping, and design around it.',
   },
   {
     slug: 'landscape',
     title: 'Landscape design',
     description:
-      '[TBC: Two or three sentences on landscape design: courtyards, gardens and outdoor rooms.]',
+      'Courtyards, gardens, terraces and verandahs that extend the home outdoors. Planting and outdoor spaces are designed with the building, bringing greenery, shade and breeze into everyday life.',
   },
   {
     slug: 'consultation',
     title: 'Design consultation',
     description:
-      '[TBC: Two or three sentences on one-off design consultations and site or plan reviews.]',
+      'Focused advice when you need a clear direction: a review of your site, a plan or an idea before you commit. It is also a simple way to begin a conversation with the studio.',
   },
   {
     slug: 'visualisation',
     title: '3D visualisation',
     description:
-      '[TBC: Two or three sentences on 3D visualisation to help clients see the design before it is built.]',
+      'Realistic 3D views of the design, so you can see the spaces, materials and light before anything is built. They make decisions easier and help everyone involved share the same picture.',
   },
 ] as const;
 
 export const process = [
-  { title: 'Consultation', description: '[TBC: what happens at the first meeting.]' },
-  { title: 'Concept', description: '[TBC: how the concept is developed and presented.]' },
-  { title: 'Design development', description: '[TBC: refining plans, materials and details.]' },
-  { title: 'Drawings & approvals', description: '[TBC: working drawings and statutory approvals.]' },
+  {
+    title: 'Consultation',
+    description: 'We meet to understand your brief, your site and how you want to live or work in the space.',
+  },
+  {
+    title: 'Concept',
+    description: 'First design ideas, from layout to overall character, developed and refined together with you.',
+  },
+  {
+    title: 'Design development',
+    description: 'Plans, elevations, materials, light and ventilation worked through in detail until everything fits together.',
+  },
+  { title: 'Drawings', description: 'A clear, complete set of drawings to build the design from.' },
   {
     title: 'Through construction',
-    description:
-      '[TBC: confirm whether the studio offers periodic site visits or design support during construction, or ends at drawings.]',
+    description: 'Design supervision on site as the building takes shape, so it is built the way it was designed.',
   },
 ] as const;

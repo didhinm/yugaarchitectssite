@@ -10,7 +10,7 @@ const BASE_PATH = process.env.BASE_PATH || '/';
 const base = BASE_PATH.replace(/\/$/, '');
 
 // Pages that must never appear in the sitemap (drafts, utility pages).
-const EXCLUDED = ['/founder/', '/contact/thanks/', '/404/'].map((path) => `${base}${path}`);
+const EXCLUDED = ['/contact/thanks/', '/404/'].map((path) => `${base}${path}`);
 
 export default defineConfig({
   site: SITE_URL,

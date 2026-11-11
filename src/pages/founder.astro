@@ -1,35 +1,116 @@
 ---
-// DRAFT (brief §5.5): built with placeholders; excluded from nav (site.ts) and sitemap (astro.config.mjs), and noindexed.
-// When the bio arrives: fill in the content, set `founderPublished = true` and remove `draft: true` from the Founder nav item in src/data/site.ts,
-// then drop '/founder/' from EXCLUDED in astro.config.mjs and remove `noindex` below.
+import { Picture } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import CTA from '../components/CTA.astro';
 import { site } from '../data/site';
+import { founder, founderPortrait } from '../data/founder';
+import { absoluteUrl } from '../lib/url';
+
+const person = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: founder.name,
+  jobTitle: founder.role,
+  url: absoluteUrl('/founder/'),
+  worksFor: { '@id': `${absoluteUrl('/')}#studio` },
+  alumniOf: [
+    { '@type': 'CollegeOrUniversity', name: 'Pillai College of Architecture' },
+    { '@type': 'CollegeOrUniversity', name: 'National Institute of Technology, Tiruchirappalli' },
+  ],
+};
 ---
 
-<BaseLayout title={site.founder} description={`${site.founder}, founder of ${site.name}.`} noindex>
-  <div class="container grid founder">
-    <div class="founder__portrait" role="img" aria-label="[TBC: Portrait of Ar. Reshmi Ravindran]"></div>
+<BaseLayout
+  title={founder.name}
+  description={`${founder.name}, ${founder.role} of ${site.name}. Architect with a Master of Architecture in Energy Efficient and Sustainable Architecture from NIT Tiruchirappalli and an IGBC Accredited Professional.`}
+  image={founderPortrait}
+  imageAlt={founderPortrait ? `Portrait of ${founder.name}` : undefined}
+  jsonLd={[person]}
+>
+  <div class:list={['container', 'grid', 'founder', { 'founder--portrait': founderPortrait }]}>
+    {
+      founderPortrait && (
+        <div class="founder__portrait">
+          <Picture
+            src={founderPortrait}
+            alt={`Portrait of ${founder.name}`}
+            formats={['avif', 'webp']}
+            widths={[480, 720, 960, 1200]}
+            sizes="(min-width: 64rem) 40vw, 100vw"
+            loading="eager"
+            fetchpriority="high"
+          />
+        </div>
+      )
+    }
 
     <div class="founder__text">
       <header class="founder__head">
         <p class="label">Founder</p>
-        <h1>{site.founder}</h1>
+        <h1>{founder.name}</h1>
+        <p class="founder__role">{founder.role} | {site.name}</p>
       </header>
 
-      <div class="prose">
-        <p class="lead">[TBC: Short introduction: who she is and why she founded Yuga.]</p>
+      <div class="founder__body">
+        <p class="lead">
+          {founder.name} is the Founder and Principal Architect of {site.name}, driven by a passion for creating
+          meaningful spaces that seamlessly blend functionality, aesthetics, and a deep connection with nature.
+        </p>
 
-        <h2>Background</h2>
-        <p>[TBC: Education and experience.]</p>
+        <section aria-labelledby="education-heading">
+          <h2 id="education-heading" class="label founder__h2">Education</h2>
+          <p>
+            She holds a Bachelor of Architecture degree from Pillai College of Architecture and a Master of
+            Architecture in Energy Efficient and Sustainable Architecture from the National Institute of Technology
+            (NIT), Tiruchirappalli. During her postgraduate studies, she secured a CGPA of 9.17 and was awarded a Gold
+            Medal for achieving the highest CGPA from the first to the fourth semester.
+          </p>
+        </section>
 
-        <h2>Philosophy</h2>
-        <p>[TBC: Design philosophy in her own words.]</p>
+        <section aria-labelledby="sustainability-heading">
+          <h2 id="sustainability-heading" class="label founder__h2">Sustainable practice</h2>
+          <p>
+            Her academic foundation, combined with her interest in sustainable design, shapes her approach towards
+            creating architecture that is environmentally responsive, thoughtfully planned, and sensitive to its
+            surroundings. She is also an IGBC Accredited Professional, reflecting her commitment to sustainable
+            building practices. Her professional credentials include the Council of Architecture, India-listed NCARB
+            certification.
+          </p>
+        </section>
 
-        <h2>Recognition & memberships</h2>
-        <p>[TBC: Awards, publications, Council of Architecture registration, professional memberships.]</p>
+        <section aria-labelledby="philosophy-heading">
+          <h2 id="philosophy-heading" class="label founder__h2">Philosophy</h2>
+          <p>
+            Her design philosophy is rooted in the belief that every inch of space deserves thoughtful consideration.
+            She approaches each project as a unique expression of the client’s lifestyle, aspirations, and needs,
+            creating spaces that are not only visually appealing but also comfortable, practical, and timeless.
+          </p>
+          <p class="founder__statement">
+            She believes architecture goes beyond designing buildings; it is about shaping experiences and creating
+            environments that enhance everyday living.
+          </p>
+          <p>
+            Through {site.name}, she strives to establish a harmonious relationship between the built environment and
+            nature, transforming ideas into thoughtfully crafted spaces where every detail has a purpose and every
+            design tells a story.
+          </p>
+        </section>
       </div>
     </div>
+
+    <aside class="founder__credentials" aria-labelledby="credentials-heading">
+      <h2 id="credentials-heading" class="label founder__h2">Credentials</h2>
+      <dl class="credentials">
+        {
+          founder.credentials.map((c) => (
+            <div class="credentials__row">
+              <dt>{c.label}</dt>
+              <dd class="muted">{c.detail}</dd>
+            </div>
+          ))
+        }
+      </dl>
+    </aside>
   </div>
 
   <CTA />
@@ -41,22 +122,77 @@ import { site } from '../data/site';
     row-gap: var(--space-5);
   }
 
-  .founder__portrait {
+  .founder__portrait,
+  .founder__text,
+  .founder__credentials {
     grid-column: 1 / -1;
-    aspect-ratio: 4 / 5;
+  }
+
+  .founder__portrait {
     background: var(--stone);
   }
 
-  .founder__text {
-    grid-column: 1 / -1;
-  }
-
-  .founder__head {
-    margin-bottom: var(--space-5);
+  .founder__portrait :global(img) {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
   }
 
   .founder__head > * + * {
     margin-top: var(--space-3);
+  }
+
+  .founder__role {
+    font-family: var(--font-heading);
+    font-weight: 300;
+    font-size: var(--size-h3);
+    color: var(--muted);
+  }
+
+  .founder__body {
+    margin-top: var(--space-5);
+    max-width: var(--measure);
+  }
+
+  .founder__body > * + * {
+    margin-top: var(--space-5);
+  }
+
+  .founder__body section > * + * {
+    margin-top: var(--space-2);
+  }
+
+  .founder__h2 {
+    color: var(--ink);
+  }
+
+  .founder__statement {
+    font-family: var(--font-heading);
+    font-weight: 300;
+    font-size: var(--size-h2);
+    line-height: 1.25;
+    text-wrap: balance;
+    padding-block: var(--space-2);
+  }
+
+  .credentials {
+    margin-top: var(--space-3);
+    border-top: 1px solid var(--rule);
+  }
+
+  .credentials__row {
+    padding-block: var(--space-2);
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .credentials dt {
+    font-family: var(--font-heading);
+    font-weight: 500;
+  }
+
+  .credentials dd {
+    margin: 0.25rem 0 0;
+    font-size: var(--size-small);
   }
 
   @media (min-width: 64rem) {
@@ -64,15 +200,31 @@ import { site } from '../data/site';
       padding-top: var(--space-6);
     }
 
-    .founder__portrait {
-      grid-column: 1 / span 5;
+    /* Without a portrait: text left, credentials right */
+    .founder__text {
+      grid-column: 1 / span 7;
+    }
+
+    .founder__credentials {
+      grid-column: 9 / span 4;
       align-self: start;
       position: sticky;
       top: calc(var(--header-height-compact) + var(--space-4));
     }
 
-    .founder__text {
+    /* With a portrait: portrait left (sticky), text and credentials right */
+    .founder--portrait .founder__portrait {
+      grid-column: 1 / span 5;
+      grid-row: 1 / span 2;
+      align-self: start;
+      position: sticky;
+      top: calc(var(--header-height-compact) + var(--space-4));
+    }
+
+    .founder--portrait .founder__text,
+    .founder--portrait .founder__credentials {
       grid-column: 7 / span 6;
+      position: static;
     }
   }
 </style>

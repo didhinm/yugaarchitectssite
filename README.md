@@ -25,19 +25,21 @@ npm run preview
 
 ## Holding page
 
-The live site currently shows an "Unearthing soon" holding page on every URL. The switch is `HOLDING_PAGE` in [`site-mode.mjs`](site-mode.mjs): set it to `false` to work on the full site locally, and commit `false` only when it's ready to go live.
+The live site currently shows an "Unearthing soon" holding page on every URL. Run `npm run dev:site` to see the full site locally. To go live, set `LAUNCHED = true` in [`site-mode.mjs`](site-mode.mjs), then commit and push.
 
 ## Before launch
 
-- [ ] Real project photos (≥2400 px long edge), names, write-ups and alt text
+- [x] First two projects (Talur’s, Summairi) with photos, write-ups and alt text
+- [ ] Larger originals of the project photos (≥2400 px long edge) where available
 - [x] Web3Forms access key in `src/data/site.ts`
 - [ ] Turn on hCaptcha for the form in the Web3Forms dashboard
 - [x] Studio page: About copy
-- [ ] Services descriptions and the final process step
-- [ ] Founder page content, then un-draft it (see the comment at the top of `src/pages/founder.astro`)
-- [ ] Home hero project (currently the project with `order: 1`)
+- [x] Services descriptions and the final process step
+- [x] Founder page bio
+- [ ] Founder portrait: drop one image into `src/assets/founder/`
+- [x] Home hero slideshow (images in `src/assets/hero/`)
 - [ ] Exact map pin for the studio (`address.geo` in `src/data/site.ts`)
-- [ ] Set `HOLDING_PAGE = false` in `site-mode.mjs`
+- [ ] Set `LAUNCHED = true` in `site-mode.mjs`
 
 ## Deploy
 

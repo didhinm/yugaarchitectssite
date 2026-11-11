@@ -43,7 +43,7 @@ docs/              design-brief.md
 ```
 
 ## Holding page (pre-launch)
-`site-mode.mjs` → `HOLDING_PAGE = true` makes `BaseLayout` render `src/components/Holding.astro` ("Unearthing soon", black background with a line-drawn plan) on every URL, including 404. All pages are noindex and no sitemap is built. Develop the full site with `HOLDING_PAGE = false` locally, but don't commit that until the client approves launch.
+While `LAUNCHED = false` in `site-mode.mjs`, `BaseLayout` renders `src/components/Holding.astro` ("Unearthing soon", black background with a line-drawn plan) on every URL, including 404. All pages are noindex and no sitemap is built. Use `npm run dev:site` / `npm run build:site` to see the full site locally. Only set `LAUNCHED = true` when the client approves launch.
 
 ## Rules
 - **All firm facts come from `src/data/site.ts`.** Never hard-code a phone number, email, address or tagline in a component.
@@ -56,7 +56,7 @@ docs/              design-brief.md
 - Every image needs descriptive `alt` text, explicit dimensions, and lazy loading below the fold. Preload the hero image.
 - Accessibility: WCAG 2.2 AA, semantic HTML, visible focus rings, keyboard-operable menu and lightbox, labelled form fields.
 - SEO: every page sets a title, description and OG image through `<Seo>`; JSON-LD `ProfessionalService` on every page, `CreativeWork` on project pages.
-- Pages or projects with `draft: true` are excluded from the build output, nav and sitemap. `/founder/` stays draft until the client sends the bio.
+- Projects with `draft: true` are excluded from the build output, nav and sitemap. Nav items can also be hidden with `draft: true` in `src/data/site.ts`.
 - British/Indian English spelling (visualisation, colour, practising).
 - Don't invent content. Use `[TBC: …]` placeholders where the client hasn't supplied facts.
 
